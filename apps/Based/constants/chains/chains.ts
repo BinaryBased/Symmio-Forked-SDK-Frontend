@@ -30,6 +30,7 @@ function getWagmiChain(supportChainList: number[]): Chain[] {
 export const ClientChain = [SupportedChainId.BASE];
 
 export const APP_CHAINS = getWagmiChain(ClientChain);
+export const ALL_CHAINS = Object.values(supportedWagmiChain);
 
 export const FALLBACK_CHAIN_ID = SupportedChainId.BASE;
 export const FALLBACK_FE_NAME = FrontEndsName.BASED;

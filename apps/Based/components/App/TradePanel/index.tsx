@@ -17,7 +17,6 @@ import MinPositionInfo from "./MinPositionInfo";
 import TradeActionButtons from "./TradeActionButton";
 import { BlackList, Suspend } from "./AccessControlPanel";
 import { TpSlChecker } from "../TPSL/TpSlChecker";
-import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 
 const Wrapper = styled.div<{ showTpSl?: boolean }>`
   position: relative;
@@ -81,9 +80,6 @@ export default function TradePanel() {
   // TODO: add this two variables in trade action buttons
   const isSuspended = false;
   const isBlacklisted = false;
-
-  const { chainId, account } = useActiveWagmi();
-  console.log(chainId, account);
 
   return (
     <Wrapper showTpSl={showTpSl}>

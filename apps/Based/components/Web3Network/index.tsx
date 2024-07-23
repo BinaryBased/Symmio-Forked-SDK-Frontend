@@ -11,7 +11,10 @@ import { isMobile } from "react-device-detect";
 import { NetworksModal } from "./NetworksModal";
 import useOnOutsideClick from "lib/hooks/useOnOutsideClick";
 import { getChainLogo } from "utils/chainLogo";
-import { useV3Ids } from "@symmio/frontend-sdk/state/chains/hooks";
+import {
+  useAllMultiAccountAddresses,
+  useV3Ids,
+} from "@symmio/frontend-sdk/state/chains/hooks";
 
 const Container = styled.div`
   display: inline-flex;
@@ -43,10 +46,16 @@ const Chevron = styled(ChevronDown)<{ open: boolean }>`
 export default function Web3Network() {
   const ref = useRef(null);
   const v3_ids = useV3Ids();
-  const isMultiChain = v3_ids.length > 1;
+  const MULTI_ACCOUNT_ADDRESS = useAllMultiAccountAddresses();
   const { account, chainId } = useActiveWagmi();
   const [networksModal, toggleNetworksModal] = useState(false);
   useOnOutsideClick(ref, () => toggleNetworksModal(false));
+
+  const isMultiChain = useMemo(() => {
+    if (chainId && Object.keys(MULTI_ACCOUNT_ADDRESS).length)
+      return Object.keys(MULTI_ACCOUNT_ADDRESS[chainId]).length > 1;
+    return false;
+  }, [MULTI_ACCOUNT_ADDRESS, chainId]);
 
   const onClickButton = () => {
     if (isMultiChain) toggleNetworksModal(!networksModal);
