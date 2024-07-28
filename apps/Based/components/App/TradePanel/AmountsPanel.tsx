@@ -51,7 +51,7 @@ const CollateralWrap = styled.div`
     &:nth-child(2) {
       position: relative;
       margin: 0 auto;
-      margin-top: -17px;
+      margin-top: -20px;
     }
     &:nth-child(3) {
       margin-top: -13px;
@@ -62,7 +62,7 @@ const CollateralWrap = styled.div`
 const LeverageWrap = styled.div`
   font-weight: 400;
   font-size: 12px;
-  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.border1};
   padding: 8px 10px;
   height: 70px;
   background: ${({ theme }) => theme.bg4};
@@ -75,9 +75,8 @@ const LeverageValue = styled(RowStart)`
   font-size: 12px;
   padding: 8px;
   padding-left: 12px;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.bg5};
-  border: 2px solid ${({ theme }) => theme.bg};
+  background: ${({ theme }) => theme.bg6};
+  border: 1px solid ${({ theme }) => theme.border1};
 `;
 
 const LeverageInput = styled(InputAmount)`
@@ -87,6 +86,7 @@ const LeverageInput = styled(InputAmount)`
   background: "transparent";
   color: ${({ theme }) => theme.text0};
 `;
+
 export default function AmountsPanel() {
   const { chainId } = useActiveWagmi();
   const COLLATERAL_TOKEN = useCollateralToken();
@@ -155,7 +155,7 @@ export default function AmountsPanel() {
     }
   }, [debouncedLeverage, customLeverage]);
 
-  const mixedColor = mix(leverage / maxLeverage, "#fd4545", "#6AFF78");
+  const mixedColor = mix(leverage / maxLeverage, "#E23FBE", "#738EEC");
 
   const handleCustomLeverage = useCallback(
     (e: any) => {

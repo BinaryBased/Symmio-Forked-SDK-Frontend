@@ -11,7 +11,6 @@ import { MAX_PENDINGS_POSITIONS_NUMBER } from "@symmio/frontend-sdk/constants/mi
 const MainButton = styled(PrimaryButton).attrs({
   height: "48px",
 })`
-  border-radius: 8px;
   font-weight: 700;
 `;
 
@@ -20,9 +19,8 @@ const LiquidationButton = styled(PrimaryButton).attrs({
 })`
   cursor: default;
   font-weight: 700;
-  border-radius: 8px;
   color: ${({ theme }) => theme.red1};
-  background: ${({ theme }) => theme.bgLoose};
+  background: ${({ theme }) => theme.bgWarning};
   &:focus,
   &:hover {
     background: ${({ theme }) => theme.bgLoose};

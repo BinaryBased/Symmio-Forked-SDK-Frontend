@@ -10,6 +10,7 @@ import {
   TransferCollateralTransactionInfo,
   MintTransactionInfo,
   SignMessageTransactionInfo,
+  StakeTransactionInfo,
 } from "@symmio/frontend-sdk/state/transactions/types";
 import { useCollateralToken } from "@symmio/frontend-sdk/constants/tokens";
 import { FALLBACK_CHAIN_ID } from "constants/chains/chains";
@@ -131,4 +132,20 @@ export function SignSummary({
   info: SignMessageTransactionInfo;
 }): JSX.Element {
   return <Summary>{info.text}</Summary>;
+}
+
+export function StakeSummary({
+  info,
+}: {
+  info: StakeTransactionInfo;
+}): JSX.Element {
+  return (
+    <Summary>
+      {info.action} {`$BASED`}
+    </Summary>
+  );
+}
+
+export function ClaimSummary(): JSX.Element {
+  return <Summary>Claimed rewards</Summary>;
 }

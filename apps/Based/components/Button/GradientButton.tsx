@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 import { BaseButton } from "components/Button";
 import { useCallback } from "react";
+import { lighten } from "polished";
 
 export const GradientButtonWrapper = styled(BaseButton)`
   padding: 1px;
   height: 40px;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.gradLight};
+  background: ${({ theme }) => theme.primaryPink};
 
   ${({ disabled }) =>
     disabled &&
@@ -20,13 +20,13 @@ export const GradientButtonWrapper = styled(BaseButton)`
 
 export const GradientColorButton = styled(BaseButton)`
   height: 100%;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.bg1};
+  background: ${({ theme }) => theme.bgPink1};
 
   &:focus,
   &:hover,
   &:active {
-    background: ${({ theme }) => theme.black2};
+    background: ${({ theme }) => lighten(0.03, theme.bgPink1)};
+    cursor: ${({ disabled }) => !disabled && "pointer"};
   }
 
   ${({ disabled }) =>
@@ -41,9 +41,7 @@ export const GradientButtonLabel = styled.span`
   font-weight: 600;
   font-size: 12px;
   line-height: 14px;
-  background: ${({ theme }) => theme.gradLight};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: ${({ theme }) => theme.primaryPink};
 `;
 
 export default function GradientButton({

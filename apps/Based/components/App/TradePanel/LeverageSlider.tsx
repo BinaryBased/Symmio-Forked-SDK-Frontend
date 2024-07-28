@@ -67,7 +67,7 @@ export function LeverageSlider({
         marks={marks}
         value={value}
         trackStyle={{
-          backgroundImage: `linear-gradient(to right, #6AFF78, ${mixedColor})`,
+          backgroundImage: `linear-gradient(to right, #738EEC, ${mixedColor})`,
           height: 4,
         }}
         dotStyle={{

@@ -27,7 +27,6 @@ import PositionDetails from "components/App/AccountData/PositionDetails";
 import {
   EmptyPosition,
   LongArrow,
-  LottieCloverfield,
   NotConnectedWallet,
   Rectangle,
   ShortArrow,
@@ -43,6 +42,7 @@ import {
   EmptyRow,
   LeverageWrap,
 } from "./Common";
+import Image from "next/image";
 
 const TableStructure = styled(RowBetween)`
   width: 100%;
@@ -158,7 +158,12 @@ function TableBody({
         ) : loading === ApiState.LOADING ||
           historyState === ApiState.LOADING ? (
           <EmptyRow style={{ padding: "60px 0px" }}>
-            <LottieCloverfield width={72} height={78} />
+            <Image
+              src={"/static/images/etc/SimpleLogo.svg"}
+              alt="Asset"
+              width={72}
+              height={78}
+            />
           </EmptyRow>
         ) : quotes.length ? (
           quotes.map((quote, index) =>

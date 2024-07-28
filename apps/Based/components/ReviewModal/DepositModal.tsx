@@ -69,7 +69,6 @@ const Close = styled.div`
   height: 24px;
   padding: 3px 6px;
   cursor: pointer;
-  border-radius: 4px;
   margin: 2px 2px 1px 0px;
   background: ${({ theme }) => theme.bg6};
 `;

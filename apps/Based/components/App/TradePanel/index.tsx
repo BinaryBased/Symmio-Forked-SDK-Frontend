@@ -19,27 +19,13 @@ import { BlackList, Suspend } from "./AccessControlPanel";
 import { TpSlChecker } from "../TPSL/TpSlChecker";
 
 const Wrapper = styled.div<{ showTpSl?: boolean }>`
-  position: relative;
-
   width: 100%;
   max-width: 480px;
-  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.border1};
   height: ${({ showTpSl }) => (showTpSl ? "735px" : "635px")};
   overflow: scroll;
-  background: ${({ theme }) => theme.bg0};
-  & > * {
-    &:first-child {
-      border-radius: 0px;
-      & > * {
-        &:first-child {
-          border-bottom-left-radius: 0;
-        }
-        &:last-child {
-          border-bottom-right-radius: 0;
-        }
-      }
-    }
-  }
+  background: ${({ theme }) => theme.primaryGradientBg};
+
   ${({ theme }) => theme.mediaWidth.upToMedium`
   max-width: unset;
 `};
@@ -47,28 +33,11 @@ const Wrapper = styled.div<{ showTpSl?: boolean }>`
 
 const Container = styled(Column)`
   padding: 12px;
-  gap: 20px;
-  border-radius: 4px;
+  gap: 12px;
   /* overflow-x: hidden; // for some reason this panel can overflow horizontally */
   & > * {
     &:first-child {
       margin-top: 8px;
-    }
-  }
-`;
-
-const TabWrapper = styled.div`
-  & > * {
-    &:first-child {
-      border-radius: 0px;
-      & > * {
-        &:first-child {
-          border-bottom-left-radius: 0;
-        }
-        &:last-child {
-          border-bottom-right-radius: 0;
-        }
-      }
     }
   }
 `;
@@ -86,9 +55,7 @@ export default function TradePanel() {
       <React.Fragment>
         {isBlacklisted && <BlackList />}
         {isSuspended && <Suspend />}
-        <TabWrapper>
-          <OrderTypeTab />
-        </TabWrapper>
+        <OrderTypeTab />
         <Container>
           <PositionTypeTab />
           <AmountsPanel />

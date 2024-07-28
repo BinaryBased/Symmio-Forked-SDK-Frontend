@@ -159,7 +159,7 @@ export default function OpenedQuoteDetails({
                 <div>-Q{id}</div>
               </MarketName>
               <Leverage>{leverage}x</Leverage>
-              <QuoteData>
+              <QuoteData longOrShort={positionType === PositionType.LONG}>
                 {positionType}
                 {positionType === PositionType.LONG ? (
                   <LongArrow width={16} height={12} color={theme.green1} />

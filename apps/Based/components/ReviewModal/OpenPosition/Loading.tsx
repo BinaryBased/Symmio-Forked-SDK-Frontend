@@ -1,8 +1,8 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 import Column from "components/Column";
 import { RowCenter } from "components/Row";
-import { LottieCloverfield } from "components/Icons";
 import ActionButton from "./ActionButton";
 
 const SummaryWrap = styled(RowCenter)`
@@ -20,7 +20,13 @@ const ButtonWrap = styled.div`
 export default function Loading({ summary }: { summary: React.ReactNode }) {
   return (
     <Column>
-      <LottieCloverfield />
+      <Image
+        src={"/static/images/etc/SimpleLogo.svg"}
+        alt="Asset"
+        width={72}
+        height={78}
+      />
+
       <SummaryWrap>{summary}</SummaryWrap>
       <ButtonWrap>
         <ActionButton />

@@ -20,6 +20,7 @@ import useBidAskPrice from "@symmio/frontend-sdk/hooks/useBidAskPrice";
 
 const PriceWrap = styled(InnerCard)`
   padding-top: 8px;
+  border: 1px solid ${({ theme }) => theme.border1};
   & > * {
     &:last-child {
       height: 28px;

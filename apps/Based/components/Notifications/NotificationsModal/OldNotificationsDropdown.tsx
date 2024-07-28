@@ -13,7 +13,6 @@ import { Card } from "components/Card";
 const ContentContainer = styled(Column)`
   gap: 12px;
   overflow: scroll;
-  border-radius: 0px 0px 4px 4px;
   background: ${({ theme }) => theme.bg3};
 `;
 
@@ -23,6 +22,7 @@ const DropdownContent = styled(Card)<{ isOpen: boolean }>`
   padding: 0px;
   max-height: 500px;
   overflow: scroll;
+  border: none;
   background: ${({ theme }) => theme.bg3};
   display: ${(props) => (props.isOpen ? "flex" : "none")};
 `;
@@ -33,9 +33,9 @@ const OldButton = styled(RowCenter)`
   min-height: 30px;
   cursor: pointer;
   position: relative;
-  border-radius: 4px;
-  color: ${({ theme }) => theme.text3};
-  background: ${({ theme }) => theme.bg4};
+  border: 1px solid ${({ theme }) => theme.border1};
+  color: ${({ theme }) => theme.text2};
+  background: ${({ theme }) => theme.bg8};
 `;
 
 const IconWrap = styled.div`

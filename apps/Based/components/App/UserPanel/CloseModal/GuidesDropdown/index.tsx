@@ -14,25 +14,24 @@ import GuideThree from "./GuideThree";
 
 const ContentContainer = styled(Column)`
   gap: 12px;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bg4};
+  border: 1px solid ${({ theme }) => theme.border1};
 `;
 
 const DropdownHeader = styled(Row)<{ borderBottom?: boolean }>`
   height: 40px;
   cursor: pointer;
   padding: 0px 12px;
-  background: ${({ theme }) => theme.bg2};
-  border-radius: ${({ borderBottom }) =>
-    borderBottom ? "4px" : "4px 4px 0px 0px"};
+  background: ${({ theme }) => theme.bg4};
 `;
 
 const DropdownContent = styled(Card)<{ isOpen: boolean }>`
   gap: 12px;
   padding: 0px 10px 10px 10px;
   max-height: 120px;
+  border: none;
   display: ${(props) => (props.isOpen ? "flex" : "none")};
-  background: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bg4};
 `;
 
 const Chevron = styled(ChevronDown)<{ open: boolean }>`

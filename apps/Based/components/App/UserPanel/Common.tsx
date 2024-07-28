@@ -20,10 +20,10 @@ export const BodyWrap = styled(Column)`
 export const PositionTypeWrap = styled(RowCenter)<{
   liquidatePending?: boolean;
 }>`
-  width: 20px;
+  width: 40px;
   height: 40px;
   background: ${({ theme, liquidatePending }) =>
-    liquidatePending ? theme.red1 : theme.bg3};
+    liquidatePending ? theme.red1 : ""};
   margin-right: 8px;
 `;
 
@@ -34,9 +34,8 @@ export const LeverageWrap = styled(RowCenter)<{ liquidatePending?: boolean }>`
   background: ${({ theme, liquidatePending }) =>
     liquidatePending ? theme.red1 : theme.bg4};
   color: ${({ theme, liquidatePending }) =>
-    liquidatePending ? theme.text0 : theme.primaryBlue};
+    liquidatePending ? theme.text0 : theme.primaryPink};
   margin-left: 8px;
-  border-radius: 2px;
   font-weight: 600;
 `;
 

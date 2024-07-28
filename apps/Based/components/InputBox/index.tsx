@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import styled, { useTheme } from "styled-components";
 import { isMobile } from "react-device-detect";
+import { Currency } from "@uniswap/sdk-core";
 import { darken } from "polished";
 
 import ImageWithFallback from "components/ImageWithFallback";
@@ -9,16 +10,19 @@ import { RowBetween, RowCenter, RowEnd } from "components/Row";
 import { ChevronDown as ChevronDownIcon, Enter } from "components/Icons";
 import { MaxButton, EnterButton } from "components/Button";
 import { StaticImageData } from "next/legacy/image";
+import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
+import { formatAmount } from "@symmio/frontend-sdk/utils/numbers";
+import { maxAmountSpend } from "@symmio/frontend-sdk/utils/currency";
+import { useCurrencyBalance } from "@symmio/frontend-sdk/lib/hooks/useCurrencyBalance";
 
 export const Wrapper = styled.div`
   width: 100%;
   font-size: 12px;
   font-weight: 400;
-  border-radius: 12px;
   white-space: nowrap;
+  border: 1px solid ${({ theme }) => theme.border1};
   background: ${({ theme }) => theme.bg4};
   position: relative;
-  border-radius: 4px;
   padding: 8px 12px;
   padding-bottom: 0px;
 `;
@@ -36,10 +40,10 @@ const NumericalWrapper = styled(RowBetween)`
 `};
 `;
 
-export const CurrencySymbol = styled.div<{ active?: any }>`
+export const CurrencySymbol = styled.div<{ color?: string; active?: any }>`
   font-size: 16px;
   font-weight: 500;
-  color: ${({ theme }) => theme.text0};
+  color: ${({ theme, color }) => color ?? theme.text0};
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
     font-size: 12px;
@@ -207,11 +211,71 @@ export function CustomInputBox({
   );
 }
 
+export function InputBox({
+  currency,
+  value,
+  onChange,
+  symbolColor,
+  title,
+  max,
+  autoFocus,
+  disabled,
+  balance,
+  balanceTitle,
+}: {
+  currency: Currency;
+  value: string;
+  onChange(values: string): void;
+  symbolColor?: string;
+  title?: string;
+  max?: boolean;
+  autoFocus?: boolean;
+  disabled?: boolean;
+  balance?: string;
+  balanceTitle?: string;
+}) {
+  const { account } = useActiveWagmi();
+  const currencyBalance = useCurrencyBalance(
+    account ?? undefined,
+    currency ?? undefined
+  );
+
+  const placeholder = useMemo(
+    () => (disabled ? "0.0" : "Enter amount"),
+    [disabled]
+  );
+  const [balanceExact, balanceDisplay] = useMemo(() => {
+    if (balance) return [balance, formatAmount(balance, 6, true)];
+    return [
+      maxAmountSpend(currencyBalance)?.toExact(),
+      currencyBalance?.toSignificant(6),
+    ];
+  }, [balance, currencyBalance]);
+
+  return (
+    <CustomInputBox2
+      title={title}
+      balanceDisplay={balanceDisplay}
+      placeholder={placeholder}
+      value={value}
+      balanceExact={balanceExact}
+      onChange={onChange}
+      disabled={disabled}
+      max={max}
+      symbol={currency.symbol}
+      symbolColor={symbolColor}
+      autoFocus={autoFocus ?? true}
+      balanceTitle={balanceTitle}
+    />
+  );
+}
+
 export function CustomInputBox2({
   value,
   title,
   placeholder,
   symbol,
+  symbolColor,
   balanceTitle,
   balanceDisplay,
   balanceExact,
@@ -233,6 +297,7 @@ export function CustomInputBox2({
   value: string;
   placeholder?: string;
   symbol?: string;
+  symbolColor?: string;
   balanceTitle?: string;
   balanceDisplay: string | number | undefined;
   balanceExact: string | number | undefined;
@@ -315,7 +380,7 @@ export function CustomInputBox2({
           </EnterButton>
         ) : (
           <SymbolWrapper>
-            <CurrencySymbol>{symbol}</CurrencySymbol>
+            <CurrencySymbol color={symbolColor}>{symbol}</CurrencySymbol>
           </SymbolWrapper>
         )}
       </NumericalWrapper>

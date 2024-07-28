@@ -66,12 +66,11 @@ const Container = styled.div`
 
 const InnerContentWrapper = styled(Row)`
   padding: 11px 8px 10px 12px;
-  height: 36px;
+  height: 38px;
   font-size: 12px;
   color: ${({ theme }) => theme.text0};
-  background: ${({ theme }) => theme.bg2};
-  border: 1px solid ${({ theme }) => theme.border3};
-  border-radius: 3px;
+  background: ${({ theme }) => theme.bg6};
+  border-left: 1px solid ${({ theme }) => theme.border1};
 `;
 
 const UserStatus = styled(RowStart)`
@@ -117,10 +116,10 @@ const ErrorButton = styled(GradientColorButton)`
   }
 `;
 
-const MainButton = styled(NavButton)`
+const MainButton = styled(NavButton)<{ error?: boolean }>`
   font-size: 12px;
   width: unset;
-  padding: 2px;
+  padding: 0px;
   height: 40px;
   display: flex;
   overflow: unset;
@@ -129,24 +128,42 @@ const MainButton = styled(NavButton)`
   &:hover,
   &:focus {
     cursor: pointer;
-    /* background: none; */
     background: ${({ theme }) => theme.bg4};
   }
+
+  ${({ error, theme }) =>
+    error &&
+    `
+    border-color: ${theme.red1};
+    background: ${theme.red4};
+    color: ${theme.text0};
+
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      background: ${theme.red4};
+    }
+  `}
 `;
 
-const Button = styled.div`
+const Button = styled.div<{ error?: boolean }>`
   width: 204px;
-  height: 36px;
-  margin: 2px 0px;
-  margin-right: 2px;
 
   font-weight: 500;
   font-size: 12px;
   text-align: center;
-  color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.border1};
   background: ${({ theme }) => theme.gradLight};
-  border-radius: 3px;
-  padding: 10px 0px;
+  padding: 12px 0px;
+
+  ${({ error, theme }) =>
+    error &&
+    `
+    font-weight: 600;
+    color: #2d2ae1;
+    border-left: 1px solid ${theme.red1};
+    background: #efdee6;
+  `}
 `;
 
 const ChooseAccountButton = styled(Button)`
@@ -164,12 +181,15 @@ const UpnlText = styled(RowCenter)`
 const CreateAccountWrapper = styled.div`
   display: flex;
   flex: 1;
+  height: 100%;
   justify-content: space-between;
   gap: 20px;
 `;
+
 const ConnectWalletWrapper = styled.div`
   display: flex;
   flex: 1;
+  height: 100%;
   justify-content: space-between;
   gap: 12px;
 `;
@@ -177,9 +197,8 @@ const ConnectWalletWrapper = styled.div`
 const AccountAddress = styled.div<{ width?: string; color?: string }>`
   width: ${({ width }) => width ?? "95px"};
   color: ${({ theme, color }) => color ?? theme.text0};
-  padding: 13px 0px;
+  padding: 12px 0px;
 `;
-
 const NetworkButton = styled(NavButton)`
   position: relative;
   cursor: pointer;

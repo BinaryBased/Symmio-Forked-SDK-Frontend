@@ -11,7 +11,7 @@ const Label = styled.div<{ color?: string }>`
   font-size: 14px;
   font-weight: 400;
   justify-self: start;
-  color: ${({ theme, color }) => color ?? theme.text3};
+  color: ${({ theme, color }) => color ?? theme.text1};
   ${({ theme }) => theme.mediaWidth.upToMedium`
     font-size: 12px;
   `};

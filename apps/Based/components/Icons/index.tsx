@@ -45,11 +45,10 @@ export { default as Status } from "./Status";
 export { default as Switch } from "./Switch";
 export { default as NextIcon } from "./Next";
 export { default as Rectangle } from "./Rectangle";
-export { default as CloverfieldLogo } from "./Logo";
+export { default as Logo } from "./Logo";
 export { default as LeverageIcon } from "./Leverage";
 export { default as GradientStar } from "./GradientStar";
 export { default as EmptyPosition } from "./EmptyPosition";
-export { default as LottieCloverfield } from "./LottieCloverfield";
 export { default as WarningCloverfield } from "./WarningCloverfield";
 export { default as NotConnectedWallet } from "./NotConnectedWallet";
 export { default as EmptyPositionDetails } from "./EmptyPositionDetails";
@@ -59,6 +58,8 @@ export { default as UnderMaintenance } from "./UnderMaintenance";
 export { default as LogoCluster } from "./LogoCluster";
 export { default as Enter } from "./Enter";
 export { default as NavbarPattern } from "./NavbarPattern";
+export { default as AerodromeLogo } from "./AerodromeLogo";
+export { default as VelocimeterLogo } from "./VelocimeterLogo";
 
 // for wrapping react feather icons
 export const IconWrapper = styled.div<{

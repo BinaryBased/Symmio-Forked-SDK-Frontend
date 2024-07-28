@@ -2,8 +2,6 @@ import { useCallback, useState } from "react";
 import styled from "styled-components";
 import Image from "next/legacy/image";
 
-import GRADIENT_CLOVERFIELD_LOGO from "/public/static/images/etc/GradientCloverfield.svg";
-
 import { useCollateralToken } from "@symmio/frontend-sdk/constants/tokens";
 import { truncateAddress } from "@symmio/frontend-sdk/utils/address";
 import { useGetTokenWithFallbackChainId } from "@symmio/frontend-sdk/utils/token";
@@ -24,13 +22,12 @@ import {
   DotFlashing,
 } from "components/Icons";
 import { WEB_SETTING } from "@symmio/frontend-sdk/config";
-import GradientButton from "components/Button/GradientButton";
+import TermsAndServices from "components/TermsAndServices";
 
 const Wrapper = styled.div<{ modal?: boolean }>`
   border: none;
   width: 100%;
   min-height: 379px;
-  border-radius: ${({ modal }) => (modal ? "10px" : "4px")};
   background: ${({ theme }) => theme.bg0};
   ${({ theme }) => theme.mediaWidth.upToLarge`
     width: 100%;
@@ -50,26 +47,50 @@ const ContentWrapper = styled(Column)`
   position: relative;
 `;
 
-const ImageWrapper = styled(RowCenter)`
-  margin-top: 15px;
-  margin-bottom: 34px;
+export const DepositButtonWrapper = styled.div`
+  padding: 1px;
+  height: 40px;
+  margin-top: 10px;
+  width: unset;
+  background: ${({ theme }) => theme.border1};
+`;
+
+export const DepositButton = styled(RowCenter)<{ disabled?: boolean }>`
+  flex-wrap: nowrap;
+  height: 100%;
+  background: ${({ theme }) => theme.gradLight};
+
+  &:focus,
+  &:hover,
+  &:active {
+    cursor: ${({ disabled }) => !disabled && "pointer"};
+    background: ${({ theme }) => theme.hoverGradLight};
+  }
+`;
+
+export const DepositButtonLabel = styled.span`
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: ${({ theme }) => theme.text0};
 `;
 
 const AccountWrapper = styled(Row)`
   height: 40px;
-  background: ${({ theme }) => theme.bg2};
-  border-radius: 6px;
+  background: ${({ theme }) => theme.bg4};
+  border: 1px solid ${({ theme }) => theme.border1};
   margin-bottom: 16px;
   padding: 10px 12px;
   font-weight: 500;
   font-size: 12px;
 
-  color: ${({ theme }) => theme.primaryBlue};
+  color: ${({ theme }) => theme.text2};
 `;
 
 const AccountNameWrapper = styled(AccountWrapper)`
-  background: ${({ theme }) => theme.bg3};
-  color: ${({ theme }) => theme.text3};
+  background: ${({ theme }) => theme.bg4};
+  border: 1px solid ${({ theme }) => theme.border1};
+  color: ${({ theme }) => theme.text2};
 `;
 
 const Input = styled.input<{
@@ -80,7 +101,6 @@ const Input = styled.input<{
   border: none;
   background: transparent;
   font-size: 12px;
-  /* color: ${({ theme }) => theme.text3}; */
   padding-left: 2px;
 
   &::placeholder {
@@ -97,12 +117,16 @@ const Input = styled.input<{
     `}
 `;
 
+const ImageWrapper = styled(RowCenter)`
+  margin-top: 15px;
+  margin-bottom: 34px;
+`;
+
 const Close = styled.div`
   width: 24px;
   height: 24px;
   padding: 3px 6px;
   cursor: pointer;
-  border-radius: 4px;
   margin: 2px 12px 1px 0px;
   background: ${({ theme }) => theme.bg6};
 `;
@@ -121,6 +145,7 @@ export default function CreateAccount({ onClose }: { onClose?: () => void }) {
   const [, setTxHash] = useState("");
   const userWhitelisted = useUserWhitelist();
   const isTermsAccepted = useIsTermsAccepted();
+  const [showTerms, setShowTerms] = useState(false);
 
   const COLLATERAL_TOKEN = useCollateralToken();
 
@@ -153,27 +178,44 @@ export default function CreateAccount({ onClose }: { onClose?: () => void }) {
   function getActionButton() {
     if (awaitingConfirmation) {
       return (
-        <GradientButton label={"Awaiting Confirmation"} disabled={true}>
-          <DotFlashing />
-        </GradientButton>
+        <DepositButtonWrapper>
+          <DepositButton>
+            <DepositButtonLabel>Awaiting Confirmation</DepositButtonLabel>
+            <DotFlashing />
+          </DepositButton>
+        </DepositButtonWrapper>
       );
     }
 
     if (WEB_SETTING.showSignModal && !isTermsAccepted) {
-      return <GradientButton label={"Accept Terms Please"} disabled={true} />;
+      return (
+        <DepositButtonWrapper>
+          <DepositButton onClick={() => setShowTerms(true)}>
+            <DepositButtonLabel>Accept Terms of Service</DepositButtonLabel>
+          </DepositButton>
+        </DepositButtonWrapper>
+      );
     }
 
     if (userWhitelisted === false) {
       return (
-        <GradientButton label={"You are not whitelisted"} disabled={true} />
+        <DepositButtonWrapper>
+          <DepositButton>
+            <DepositButtonLabel>You are not whitelisted</DepositButtonLabel>
+            <DotFlashing />
+          </DepositButton>
+        </DepositButtonWrapper>
       );
     }
 
     return (
-      <GradientButton
-        label={name === "" ? "Enter account name" : "Create Account"}
-        onClick={() => onAddAccount()}
-      />
+      <DepositButtonWrapper>
+        <DepositButton onClick={() => onAddAccount()}>
+          <DepositButtonLabel>
+            {name === "" ? "Enter account name" : "Create Account"}
+          </DepositButtonLabel>
+        </DepositButton>
+      </DepositButtonWrapper>
     );
   }
 
@@ -197,10 +239,10 @@ export default function CreateAccount({ onClose }: { onClose?: () => void }) {
       <ContentWrapper>
         <ImageWrapper>
           <Image
-            src={GRADIENT_CLOVERFIELD_LOGO}
-            alt="cloverfield_logo"
-            width={110}
-            height={121}
+            src={"/static/images/etc/BasedTableau.svg"}
+            alt="based-tableau"
+            width={332}
+            height={76}
           />
         </ImageWrapper>
         <AccountWrapper>
@@ -233,6 +275,9 @@ export default function CreateAccount({ onClose }: { onClose?: () => void }) {
           <DescriptionText>{`Create Account > Deposit ${collateralCurrency?.symbol} > Enjoy Trading`}</DescriptionText>
         )}
       </ContentWrapper>
+      {showTerms ? (
+        <TermsAndServices onDismiss={() => setShowTerms(false)} />
+      ) : null}
     </Wrapper>
   );
 }

@@ -2,29 +2,24 @@ import styled from "styled-components";
 import { RowCenter, RowStart } from "components/Row";
 import { lighten } from "polished";
 
-export const TabWrapper = styled(RowCenter)`
+export const TabWrapper = styled(RowCenter)<{ outerBorder?: boolean }>`
+  gap: 1px;
   width: unset;
   font-size: 16px;
   font-weight: 400;
-  color: ${({ theme }) => theme.text0};
-  border-radius: 4px;
   overflow: hidden;
-  gap: 1px;
+  color: ${({ theme }) => theme.text0};
+  border-bottom: 1px solid ${({ theme }) => theme.border1};
+  background: ${({ theme }) => theme.border1};
 
-  & > * {
-    &:first-child {
-      border-radius: 4px 0px 0px 4px;
-    }
-    &:last-child {
-      border-radius: 0px 4px 4px 0px;
-    }
-  }
+  ${({ outerBorder, theme }) =>
+    outerBorder &&
+    `
+    border: 1px solid ${theme.border1};
+  `}
 `;
 
-export const TabButton = styled(RowCenter)<{
-  active: boolean;
-  hideOuterBorder: boolean;
-}>`
+export const TabButton = styled(RowCenter)<{ active: boolean }>`
   width: 100%;
   height: 40px;
   position: relative;
@@ -33,9 +28,6 @@ export const TabButton = styled(RowCenter)<{
   font-weight: ${({ active }) => (active ? 500 : 400)};
   color: ${({ active, theme }) => (active ? theme.text0 : theme.text4)};
   background: ${({ active, theme }) => (active ? theme.bg3 : theme.bg1)};
-  border: 1px solid
-    ${({ theme, active, hideOuterBorder }) =>
-      hideOuterBorder ? "transparent" : active ? theme.text0 : theme.text4};
 
   &:hover {
     cursor: ${({ active }) => (active ? "default" : "pointer")};
@@ -47,7 +39,6 @@ export const TabButton = styled(RowCenter)<{
 export const Option = styled.div<{ active?: boolean }>`
   width: fit-content;
   color: ${({ theme }) => theme.text1};
-  border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
   line-height: 19px;
@@ -56,7 +47,7 @@ export const Option = styled.div<{ active?: boolean }>`
   ${({ active, theme }) =>
     active &&
     `
-    background: ${theme.gradLight};
+    background: ${theme.green1};
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   `}
@@ -69,22 +60,21 @@ export const Option = styled.div<{ active?: boolean }>`
 export function Tab({
   tabOptions,
   activeOption,
-  hideOuterBorder,
+  outerBorder,
   onChange,
 }: {
   tabOptions: string[];
   activeOption: string;
-  hideOuterBorder?: boolean;
+  outerBorder?: boolean;
   onChange: (tab: string) => void;
 }): JSX.Element {
   return (
-    <TabWrapper>
+    <TabWrapper outerBorder={outerBorder}>
       {tabOptions.map((tab, i) => (
         <TabButton
           key={i}
           active={tab === activeOption}
           onClick={() => onChange(tab)}
-          hideOuterBorder={!!hideOuterBorder}
         >
           {tab}
         </TabButton>
@@ -97,13 +87,11 @@ export function TabModal({
   tabOptions,
   activeOption,
   onChange,
-  hideOuterBorder,
   ...rest
 }: {
   tabOptions: string[];
   activeOption: string;
   onChange: (tab: string) => void;
-  hideOuterBorder?: boolean;
   [x: string]: any;
 }): JSX.Element {
   return (
@@ -113,7 +101,6 @@ export function TabModal({
           key={i}
           active={tab === activeOption}
           onClick={() => onChange(tab)}
-          hideOuterBorder={!!hideOuterBorder}
         >
           <div>{tab}</div>
         </TabButton>
@@ -150,23 +137,27 @@ export function TabModalJSX({
   tabOptions,
   activeOption,
   onChange,
-  hideOuterBorder,
+  outerBorder,
   ...rest
 }: {
   tabOptions: { label: string; content: string | JSX.Element }[];
   activeOption: string;
   onChange: (tab: string) => void;
-  hideOuterBorder?: boolean;
+  outerBorder?: boolean;
   [x: string]: any;
 }): JSX.Element {
   return (
-    <TabWrapper width={"100%"} justifyContent={"space-between"} {...rest}>
+    <TabWrapper
+      width={"100%"}
+      justifyContent={"space-between"}
+      outerBorder={outerBorder}
+      {...rest}
+    >
       {tabOptions.map((tab, i) => (
         <TabButton
           key={i}
           active={tab.label === activeOption}
           onClick={() => onChange(tab.label)}
-          hideOuterBorder={!!hideOuterBorder}
         >
           <div>{tab.content}</div>
         </TabButton>

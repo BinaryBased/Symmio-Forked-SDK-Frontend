@@ -1,5 +1,5 @@
 import { ThemedCssFunction } from "styled-components/macro";
-import { SupportedThemes } from ".";
+import { SupportedThemes } from "theme";
 
 export type Color = string;
 export interface Colors {
@@ -16,6 +16,8 @@ export interface Colors {
   text3: Color;
   text4: Color;
   text5: Color;
+  text6: Color;
+  text7: Color;
 
   // backgrounds
   bg: Color;
@@ -27,49 +29,91 @@ export interface Colors {
   bg5: Color;
   bg6: Color;
   bg7: Color;
+  bg8: Color;
+  bg9: Color;
 
   bgLoose: Color;
   bgWin: Color;
   bgWarning: Color;
+  bgPink: Color;
+  bgPink1: Color;
+  disablePink: Color;
+  primaryPink: Color;
+  lightPink: Color;
 
   // borders
   border1: Color;
   border2: Color;
   border3: Color;
 
+  gradDark: Color;
   gradLight: Color;
   gradError: Color;
+  hoverGradLight: Color;
   hoverGrad: Color;
   hoverShort: Color;
   hoverLong: Color;
+  primaryGradientBg: Color;
+  blueGradientBg: Color;
+  pinkGradientBg: Color;
   primaryBlackNew: Color;
   primaryDisable: Color;
   primaryDarkBg: Color;
   primaryDark: Color;
   primaryDarkOld: Color;
-
+  primaryBlue1: Color;
+  disableColor: Color;
   //blues
   primary0: Color;
   primary1: Color;
   primary2: Color;
+  primary3: Color;
+  primary4: Color;
+  primary5: Color;
+  primary6: Color;
+  primary7: Color;
+  primary8: Color;
+
+  primaryText1: Color;
+
+  // pinks
+  secondary1: Color;
+  secondary2: Color;
 
   // other
   black2: Color;
   red1: Color;
   red2: Color;
-  red5: Color;
+  red3: Color;
+  red4: Color;
   red6: Color;
   green1: Color;
+  green2: Color;
+  green3: Color;
+  green4: Color;
+  green5: Color;
+  green6: Color;
+  green7: Color;
   yellow1: Color;
   yellow2: Color;
+  yellow3: Color;
+  yellow4: Color;
   blue1: Color;
   blue2: Color;
+  blue3: Color;
+  blue4: Color;
+  blue5: Color;
   primaryBlue: Color;
+  darkPink: Color;
+  orange: Color;
+  darkOrange: Color;
 
   error: Color;
   error1: Color;
   success: Color;
   warning: Color;
+
+  usdt: Color;
   twitter: Color;
 }
 

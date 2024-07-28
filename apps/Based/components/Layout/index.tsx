@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 `;
 const HeaderWrap = styled.div`
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
   position: sticky;
   top: 0;
   z-index: 300;

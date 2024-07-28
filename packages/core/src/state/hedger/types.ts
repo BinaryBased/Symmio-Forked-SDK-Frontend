@@ -29,21 +29,6 @@ export interface PriceResponse {
   i: string;
 }
 
-// Web socket response
-// export interface DepthResponse {
-//   e: string
-//   E: number
-//   T: number
-//   s: string
-//   U: number
-//   u: number
-//   pu: number
-//   b: [string, string][]
-//   a: [string, string][]
-// }
-
-// api response
-
 export interface DepthResponse {
   symbol: string;
   bidPrice: string;
@@ -114,4 +99,9 @@ export interface HedgerState {
   priceRange: PriceRange;
   priceRangeStatus: ApiState;
   errorMessages: ErrorMessages;
+}
+
+export interface ITotalTradingFee {
+  platformFee: string;
+  __typename: string;
 }

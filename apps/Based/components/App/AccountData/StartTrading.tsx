@@ -16,15 +16,18 @@ import {
   useModalOpen,
 } from "@symmio/frontend-sdk/state/application/hooks";
 
-import GradientButton from "components/Button/GradientButton";
 import { Row, RowStart, RowBetween, RowCenter, RowEnd } from "components/Row";
 import DepositModal from "components/ReviewModal/DepositModal";
+import {
+  DepositButton,
+  DepositButtonLabel,
+  DepositButtonWrapper,
+} from "./CreateAccount";
 
 const Wrapper = styled.div`
   border: none;
   width: 100%;
   min-height: 379px;
-  border-radius: 4px;
   background: ${({ theme }) => theme.bg0};
   ${({ theme }) => theme.mediaWidth.upToLarge`
     width: 100%;
@@ -66,9 +69,7 @@ const DepositText = styled.div`
   text-align: center;
   margin-bottom: 37px;
 
-  background: ${({ theme }) => theme.hoverGrad};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: ${({ theme }) => theme.primaryPink};
 `;
 
 export default function StartTrading({ symbol }: { symbol?: string }) {
@@ -90,10 +91,10 @@ export default function StartTrading({ symbol }: { symbol?: string }) {
       <ContentWrapper>
         <ImageWrapper>
           <Image
-            src={"/static/images/etc/Asset.svg"}
-            alt="Asset"
-            width={174}
-            height={135}
+            src={"/static/images/etc/BasedTableau.svg"}
+            alt="based-tableau"
+            width={332}
+            height={76}
           />
         </ImageWrapper>
         <DepositText>Deposit {symbol} and start trading</DepositText>
@@ -103,10 +104,11 @@ export default function StartTrading({ symbol }: { symbol?: string }) {
             {formatAmount(collateralBalance)} {symbol}
           </Value>
         </RowBetween>
-        <GradientButton
-          label={`Deposit ${symbol}`}
-          onClick={() => toggleDepositModal()}
-        />
+        <DepositButtonWrapper>
+          <DepositButton onClick={() => toggleDepositModal()}>
+            <DepositButtonLabel>Deposit {symbol}</DepositButtonLabel>
+          </DepositButton>
+        </DepositButtonWrapper>
       </ContentWrapper>
       {showDepositModal && <DepositModal />}
     </Wrapper>

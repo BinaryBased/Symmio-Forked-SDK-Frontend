@@ -25,7 +25,6 @@ const NotificationsCount = styled.div`
   left: 27px;
   bottom: 3px;
   padding: 3px;
-  border-radius: 10px;
   font-weight: 500;
   font-size: 10px;
   text-align: center;
@@ -42,7 +41,6 @@ const NotificationsCount = styled.div`
     font-size: 7px;
   `};
 `;
-
 export default function Notifications() {
   const theme = useTheme();
   const ref = useRef(null);
@@ -66,7 +64,7 @@ export default function Notifications() {
   return (
     <div ref={ref}>
       <NavButton onClick={closeOnClick}>
-        <Bell color={newNotifications ? theme.primaryBlue : undefined} />
+        <Bell color={newNotifications ? theme.border1 : undefined} />
         {newNotifications && (
           <NotificationsCount>{unreadNotifications.length}</NotificationsCount>
         )}

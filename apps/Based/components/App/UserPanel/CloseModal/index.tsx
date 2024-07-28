@@ -91,7 +91,6 @@ const Wrapper = styled(Column)`
 const MainButton = styled(PrimaryButton).attrs({
   height: "48px",
 })`
-  border-radius: 8px;
   font-weight: 700;
 `;
 
@@ -460,6 +459,7 @@ export default function CloseModal({
           tabOptions={Object.values(OrderType)}
           activeOption={activeTab}
           onChange={(tab: string) => setActiveTab(tab as OrderType)}
+          outerBorder
         />
 
         {activeTab === OrderType.LIMIT ? (

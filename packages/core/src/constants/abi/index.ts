@@ -4,6 +4,8 @@ import DIAMOND_ABI from "./Diamond";
 import MULTI_ACCOUNT_ABI from "./MultiAccount";
 import COLLATERAL_ABI from "./Collateral";
 import SIGNATURE_STORE_ABI from "./SIGNATURE_STORE";
+import STAKING_ABI from "./STAKING_ABI";
+import QUOTER_V2_ABI from "./QUOTER_V2_ABI";
 
 export {
   ERC20_BYTES32_ABI,
@@ -12,4 +14,6 @@ export {
   MULTI_ACCOUNT_ABI,
   COLLATERAL_ABI,
   SIGNATURE_STORE_ABI,
+  STAKING_ABI,
+  QUOTER_V2_ABI,
 };

@@ -31,7 +31,6 @@ const ModalWrapper = styled(Card)`
 
 const Wrapper = styled(Row)`
   height: 36px;
-  border-radius: 4px;
   background: ${({ theme }) => theme.bg3};
 `;
 
@@ -81,7 +80,6 @@ const Close = styled.div`
   height: 32px;
   padding: 8px;
   cursor: pointer;
-  border-radius: 4px;
   margin: 2px 2px 1px 0px;
   background: ${({ theme }) => theme.bg6};
 `;

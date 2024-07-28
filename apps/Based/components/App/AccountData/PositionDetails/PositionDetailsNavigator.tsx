@@ -23,9 +23,8 @@ const ChangePositionBtn = styled.button<{ disabled?: boolean }>`
   align-items: center;
   width: 36px;
   height: 20px;
-  border-radius: 2px;
-  background-color: ${({ theme, disabled }) =>
-    disabled ? theme.bg2 : theme.bg5};
+  border: 1px solid ${({ theme }) => theme.border1};
+  background-color: ${({ theme }) => theme.bg0};
 
   &:hover {
     cursor: ${({ disabled }) => (disabled ? "unset" : "pointer")};
@@ -71,7 +70,7 @@ export default function PositionDetailsNavigator() {
             isFirstItem || setQuoteDetail(currentOrders[quoteIndex - 1])
           }
         >
-          <NextIcon color={isFirstItem ? theme.text4 : undefined} />
+          <NextIcon color={isFirstItem ? undefined : theme.border1} />
         </ChangePositionBtn>
         <ChangePositionBtn
           disabled={isLastItem}
@@ -79,7 +78,7 @@ export default function PositionDetailsNavigator() {
             isLastItem || setQuoteDetail(currentOrders[quoteIndex + 1])
           }
         >
-          <PreviousIcon color={isLastItem ? theme.text4 : undefined} />
+          <PreviousIcon color={isLastItem ? undefined : theme.border1} />
         </ChangePositionBtn>
       </RowEnd>
     </div>

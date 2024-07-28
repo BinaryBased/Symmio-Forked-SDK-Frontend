@@ -47,7 +47,7 @@ export default function TradingViewWidget({ symbol }: { symbol: string }) {
           autosize: true,
           interval: "1",
           timezone: "exchange",
-          theme: "dark",
+          theme: "light",
           style: "1",
           locale: "en",
           toolbar_bg: "#f1f3f6",

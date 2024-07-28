@@ -44,8 +44,7 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.bg0};
+  background: ${({ theme }) => theme.bg1};
 `;
 
 const Title = styled(Row)`
@@ -87,7 +86,7 @@ const DataWrap = styled.div`
   padding: 12px;
   flex-flow: column nowrap;
   position: relative;
-  background: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bg0};
 `;
 
 const TopRow = styled(RowBetween)`
@@ -259,11 +258,12 @@ function NotValidState({ text }: { text: string }) {
     <Wrapper>
       <ColumnCenter style={{ marginTop: "78px" }}>
         <Image
-          src={"/static/images/etc/SimpleCloverfield.svg"}
+          src={"/static/images/etc/SimpleLogo.svg"}
           alt="Asset"
           width={110}
           height={120}
         />
+
         <ContextText>{text}</ContextText>
       </ColumnCenter>
     </Wrapper>

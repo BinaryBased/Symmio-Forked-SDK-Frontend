@@ -14,30 +14,39 @@ import {
   useSetTypedValue,
   useTpSlDelegate,
   useTradeTpSl,
+  usePositionType,
 } from "@symmio/frontend-sdk/state/trade/hooks";
 import { useIsHavePendingTransaction } from "@symmio/frontend-sdk/state/transactions/hooks";
 import { MainButton } from "components/Button";
-import { RowStart } from "components/Row";
 import useTradePage from "@symmio/frontend-sdk/hooks/useTradePage";
 import { DEFAULT_PRECISION } from "@symmio/frontend-sdk/constants/misc";
 import { calculateString } from "utils/calculationalString";
-import { InputField } from "@symmio/frontend-sdk/types/trade";
+import {
+  ErrorStateMessages,
+  InputField,
+  PositionType,
+} from "@symmio/frontend-sdk/types/trade";
 import { ConnectionStatus } from "@symmio/frontend-sdk/types/api";
 import {
   useUserWhitelist,
   useIsTermsAccepted,
+  useAccountPartyAStat,
+  useActiveAccountAddress,
 } from "@symmio/frontend-sdk/state/user/hooks";
 import { WEB_SETTING } from "@symmio/frontend-sdk/config";
-import OpenPositionButton from "components/Button/OpenPositionButton";
 import { useSendDelegateAccess } from "@symmio/frontend-sdk/hooks/useTpSl";
+import AnimatedButton from "components/Button/MainButton";
+import { toBN } from "@symmio/frontend-sdk/utils/numbers";
 
 export default function TradeActionButtons(): JSX.Element | null {
   const validatedContext = useInvalidContext();
   const market = useActiveMarket();
   const connectionStatus = useWebSocketStatus();
+  const account = useActiveAccountAddress();
 
   const toggleShowTradeInfoModal = useToggleOpenPositionModal();
   const isPendingTxs = useIsHavePendingTransaction();
+  const positionType = usePositionType();
   const { tp, sl } = useTradeTpSl();
   const delegateStatus = useTpSlDelegate();
   const [delegateLoading, setDelegateLoading] = useState(false);
@@ -48,11 +57,18 @@ export default function TradeActionButtons(): JSX.Element | null {
   const setTypedValue = useSetTypedValue();
   const userWhitelisted = useUserWhitelist();
   const isAcceptTerms = useIsTermsAccepted();
+  const { allocatedBalance } = useAccountPartyAStat(account);
 
   const { formattedAmounts, state, balance } = useTradePage();
 
-  const pricePrecision = useMemo(
-    () => (market ? market.pricePrecision : DEFAULT_PRECISION),
+  // const pricePrecision = useMemo(
+  //   () => (market ? market.pricePrecision : DEFAULT_PRECISION),
+  //   [market]
+  // );
+
+  const [outputTicker, pricePrecision] = useMemo(
+    () =>
+      market ? [market.symbol, market.pricePrecision] : ["", DEFAULT_PRECISION],
     [market]
   );
   const { callback: setDelegateAccessCallBack, error } =
@@ -92,7 +108,9 @@ export default function TradeActionButtons(): JSX.Element | null {
   }
 
   if (WEB_SETTING.showSignModal && !isAcceptTerms) {
-    return <MainButton disabled>Accept Terms Please</MainButton>;
+    return (
+      <AnimatedButton disabled={true} customText={"Accept Terms of Service"} />
+    );
   }
 
   if (!delegateStatus && (tp || sl)) {
@@ -103,11 +121,9 @@ export default function TradeActionButtons(): JSX.Element | null {
     );
   }
 
-  // Pass if it is null or undefined
   if (market?.rfqAllowed === false) {
     return (
-      <ErrorButton
-        state={state}
+      <AnimatedButton
         disabled
         exclamationMark
         customText="RFQ is not allowed for this market"
@@ -135,10 +151,18 @@ export default function TradeActionButtons(): JSX.Element | null {
     return <MainButton onClick={onEnterPress}>Calculate Amount</MainButton>;
   }
 
+  if (toBN(allocatedBalance).lte(0)) {
+    return (
+      <MainButton disabled>
+        Deposit to {positionType === PositionType.LONG ? "Long" : "Short"}{" "}
+        {outputTicker}
+      </MainButton>
+    );
+  }
+
   if (connectionStatus !== ConnectionStatus.OPEN) {
     return (
-      <ErrorButton
-        state={state}
+      <AnimatedButton
         disabled={true}
         exclamationMark={true}
         customText={"Hedger disconnected"}
@@ -147,8 +171,15 @@ export default function TradeActionButtons(): JSX.Element | null {
   }
 
   if (state) {
-    return <ErrorButton state={state} disabled={true} exclamationMark={true} />;
+    return (
+      <AnimatedButton
+        disabled={true}
+        exclamationMark={true}
+        customText={ErrorStateMessages[state]}
+      />
+    );
   }
+
   if (userWhitelisted === false) {
     return (
       <ErrorButton
@@ -161,8 +192,6 @@ export default function TradeActionButtons(): JSX.Element | null {
   }
 
   return (
-    <RowStart>
-      <OpenPositionButton onClick={() => toggleShowTradeInfoModal()} />
-    </RowStart>
+    <AnimatedButton ticker={outputTicker} onClick={toggleShowTradeInfoModal} />
   );
 }

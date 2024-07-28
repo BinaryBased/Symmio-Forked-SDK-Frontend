@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Link({
   size = 8,
-  color = "#EBEBEC",
+  color = "#FB5FCF",
   ...rest
 }: {
   size?: number;

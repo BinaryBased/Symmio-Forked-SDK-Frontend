@@ -23,6 +23,7 @@ import { ItemsPerPage } from "./PaginateTable";
 import ArrowRightTriangle from "components/Icons/ArrowRightTriangle";
 import { RowCenter } from "components/Row";
 import { IconWrapper } from "components/Icons";
+import { sortQuotesByModifyTimestamp } from "@symmio/frontend-sdk/hooks/useQuotes";
 
 const Wrapper = styled(Card)`
   padding: 0;
@@ -73,20 +74,25 @@ export default function UserPanel(): JSX.Element | null {
   }
 
   const positionQuotes: Quote[] = useMemo(() => {
-    return [...pendings, ...positions].sort(
-      (a: Quote, b: Quote) =>
-        Number(b.statusModifyTimestamp) - Number(a.statusModifyTimestamp)
-    );
-  }, [pendings, positions]);
+    return [...positions].sort(sortQuotesByModifyTimestamp);
+  }, [positions]);
+
+  const pendingQuotes: Quote[] = useMemo(() => {
+    return [...pendings].sort(sortQuotesByModifyTimestamp);
+  }, [pendings]);
 
   const currentOrders = useMemo(() => {
     switch (selectedTab) {
       case StateTabs.POSITIONS:
         return positionQuotes;
+      case StateTabs.OPEN_ORDERS:
+        return pendingQuotes;
+      case StateTabs.ORDER_HISTORY:
+        return closed;
       default:
         return closed;
     }
-  }, [selectedTab, positionQuotes, closed]);
+  }, [selectedTab, positionQuotes, pendingQuotes, closed]);
 
   const paginatedItems = useMemo(() => {
     return currentOrders.slice((page - 1) * ItemsPerPage, page * ItemsPerPage);
@@ -96,6 +102,10 @@ export default function UserPanel(): JSX.Element | null {
     switch (selectedTab) {
       case StateTabs.POSITIONS:
         return <Position quotes={paginatedItems} />;
+      case StateTabs.OPEN_ORDERS:
+        return <Position quotes={paginatedItems} isPending={true} />;
+      case StateTabs.ORDER_HISTORY:
+        return <History quotes={paginatedItems} />;
       default:
         return <History quotes={paginatedItems} />;
     }
@@ -106,6 +116,7 @@ export default function UserPanel(): JSX.Element | null {
     if (currentOrders.length === (page - 1) * ItemsPerPage && page > 1) {
       setPage((page) => page - 1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOrders.length]);
 
   useEffect(() => {
@@ -114,14 +125,18 @@ export default function UserPanel(): JSX.Element | null {
   }, [selectedTab, setQuoteDetail, account, chainId]);
 
   useEffect(() => {
-    const isQuoteInPositions = positionQuotes.some(
-      (quote) => quote.id === quoteDetail?.id
-    );
+    const isQuoteInPositions =
+      positionQuotes.some((quote) => quote.id === quoteDetail?.id) ||
+      pendingQuotes.some((quote) => quote.id === quoteDetail?.id);
 
-    if (!isQuoteInPositions && selectedTab === StateTabs.POSITIONS) {
+    if (
+      !isQuoteInPositions &&
+      (selectedTab === StateTabs.POSITIONS ||
+        selectedTab === StateTabs.OPEN_ORDERS)
+    ) {
       setQuoteDetail(null);
     }
-  }, [positionQuotes, quoteDetail, selectedTab, setQuoteDetail]);
+  }, [positionQuotes, pendingQuotes, quoteDetail, selectedTab, setQuoteDetail]);
 
   const onClickPage = (value: number) => {
     if (value > page) {
@@ -145,6 +160,8 @@ export default function UserPanel(): JSX.Element | null {
       <OrdersTab
         activeTab={selectedTab}
         setActiveTab={(s: StateTabs) => setSelectedTab(s)}
+        positionsCount={positionQuotes.length}
+        openOrdersCount={pendingQuotes.length}
       />
       {Rows}
       {paginatedItems.length > 0 && (

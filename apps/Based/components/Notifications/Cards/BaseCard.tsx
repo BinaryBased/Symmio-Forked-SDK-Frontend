@@ -16,8 +16,8 @@ const Container = styled(Row)<{
   report?: boolean;
   cursor?: string;
 }>`
-  border-radius: ${({ report }) => (report ? "4px 4px 0px 0px" : "4px")};
-  background: ${({ theme, bg }) => (bg ? bg : theme.bg5)};
+  border: 1px solid ${({ theme }) => theme.border1};
+  background: ${({ theme, bg }) => (bg ? bg : theme.bgPink1)};
   cursor: ${({ cursor }) => (cursor ? cursor : "default")};
 
   ${({ border }) =>
@@ -64,7 +64,6 @@ const Report = styled(RowCenter)`
   font-size: 10px;
   text-align: center;
   margin-top: -10px;
-  border-radius: 0px 0px 2px 2px;
   color: ${({ theme }) => theme.text0};
   background: ${({ theme }) => theme.bg6};
 `;

@@ -15,21 +15,9 @@ const Wrapper = styled.div`
   min-height: 379px;
   display: flex;
   flex-flow: column nowrap;
-  border-radius: 4px;
   background: ${({ theme }) => theme.bg0};
-  & > * {
-    &:first-child {
-      border-radius: 0px;
-      & > * {
-        &:first-child {
-          border-bottom-left-radius: 0;
-        }
-        &:last-child {
-          border-bottom-right-radius: 0;
-        }
-      }
-    }
-  }
+  border: 1px solid ${({ theme }) => theme.border1};
+
   ${({ theme }) => theme.mediaWidth.upToMedium`
   max-width: unset;
 `};
@@ -64,7 +52,6 @@ export default function Overviews() {
             setPanelType(option as PanelType);
             if (option === PanelType.ACCOUNT_OVERVIEW) setQuoteDetail(null);
           }}
-          hideOuterBorder
         />
       )}
       {panelType === PanelType.ACCOUNT_OVERVIEW ? (

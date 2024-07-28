@@ -26,8 +26,7 @@ const StarWrap = styled.div`
   width: 36px;
   height: 36px;
   padding: 10px;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.black2};
+  background: ${({ theme }) => theme.bg8};
 `;
 
 const Text = styled.div<{ active?: boolean; width?: string }>`
@@ -37,7 +36,7 @@ const Text = styled.div<{ active?: boolean; width?: string }>`
   padding: 14px;
 
   width: ${({ width }) => width ?? "100%"};
-  color: ${({ theme, active }) => (active ? theme.primaryBlue : theme.text1)};
+  color: ${({ theme, active }) => (active ? theme.primaryPink : theme.text1)};
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
       font-size: 12px;

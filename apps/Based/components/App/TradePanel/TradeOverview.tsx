@@ -57,6 +57,10 @@ const PositionValue = styled(RowEnd)`
   `};
 `;
 
+const Name = styled.div`
+  color: ${({ theme }) => theme.text1};
+`;
+
 export default function TradeOverview() {
   const { chainId } = useActiveWagmi();
   const market = useActiveMarket();
@@ -95,7 +99,7 @@ export default function TradeOverview() {
     <>
       <Wrapper>
         <PositionWrap>
-          <div>Position Value:</div>
+          <Name>Position Value:</Name>
           <PositionValue>
             <div>{`${
               toBN(formattedAmounts[0]).isNaN()

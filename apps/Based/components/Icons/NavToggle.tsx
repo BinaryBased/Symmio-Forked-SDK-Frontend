@@ -18,8 +18,8 @@ export default function NavToggle({
       xmlns="http://www.w3.org/2000/svg"
       {...rest}
     >
-      <rect width="24" height="3" rx="1" fill="#A0A2AA" />
-      <rect y="7" width="24" height="3" rx="1" fill="#A0A2AA" />
+      <rect width="24" height="3" rx="1" fill="#123378" />
+      <rect y="7" width="24" height="3" rx="1" fill="#123378" />
     </svg>
   );
 }

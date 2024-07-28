@@ -53,6 +53,7 @@ const tokenNames = [
   "MKR",
   "SUSHI",
   "AAVE",
+  "BASED",
 ];
 
 const LogoMap: { [token: string]: any } = {};

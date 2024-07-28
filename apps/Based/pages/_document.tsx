@@ -62,7 +62,7 @@ class MyDocument extends Document {
               href="/images/512x512_App_Icon.png"
             />
 
-            <title>Cloverfield</title>
+            <title>Based</title>
             <meta
               name="description"
               content="Decentralized OTC perpetual exchange. Trade BTC, ETH, ARB and +124 other markets oracle-less and with up to 40x leverage"
@@ -75,7 +75,7 @@ class MyDocument extends Document {
               crossOrigin="anonymous"
             />
             <link
-              href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&family=Spline+Sans:wght@400;500;600;700&display=swap"
+              href="https://fonts.googleapis.com/css2?family=Chakra+Petch&family=Inter&family=Space+Grotesk:wght@500&family=Spline+Sans&display=swap"
               rel="stylesheet"
             />
           </>

@@ -9,7 +9,6 @@ export const BaseButton = styled(RowCenter)<{
   padding: 1rem;
   height: 100%;
   font-weight: 600;
-  border-radius: 4px;
   outline: none;
   text-decoration: none;
   cursor: pointer;
@@ -36,10 +35,11 @@ export const NavButton = styled(BaseButton)<{ width?: number | string }>`
   width: ${({ width }) => (width ? width : "40px")};
   font-size: 14px;
   padding: 0 10px;
-  background: ${({ theme }) => theme.bg4};
+  background: ${({ theme }) => theme.bg0};
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 500;
+  border: 1px solid ${({ theme }) => theme.border1};
 
   ${({ theme, width }) => theme.mediaWidth.upToMedium`
     height: 32px;
@@ -53,34 +53,26 @@ export const PrimaryButton = styled(BaseButton)<{ height?: string | number }>`
   width: 100%;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 8px;
+  border: 2px solid ${({ theme }) => theme.border1};
   height: ${({ height }) => (height ? height : "45px")};
   background: ${({ theme }) => theme.gradLight};
-  color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text0};
 
-  &:focus,
-  &:hover {
-    background: ${({ theme }) => theme.hoverGrad};
-  }
   ${({ disabled }) =>
     disabled &&
     `
-
       cursor: default;
       opacity:0.5;
-
   `}
 `;
 
 export const MainButton = styled(PrimaryButton)`
   height: 48px;
-  border-radius: 8px;
 `;
 
 export const SecondaryButton = styled(PrimaryButton)`
   background: ${({ theme }) => theme.bg1};
   border: 1px solid ${({ theme }) => theme.bg7};
-  border-radius: 8px;
   font-weight: 500;
   font-size: 12px;
 
@@ -118,7 +110,6 @@ export const TableButton = styled(PrimaryButton)<{ width?: string | number }>`
   width: ${({ width }) => (width ? width : "132px")};
   height: 40px;
   padding: 0;
-  border-radius: 8px;
   white-space: nowrap;
 
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
@@ -161,7 +152,7 @@ export const BlueButton = styled(TableButton)`
 
 export const MaxButton = styled.div`
   font-size: 12px;
-  background: ${({ theme }) => theme.primaryBlue};
+  background: ${({ theme }) => theme.primaryPink};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 500;
@@ -177,7 +168,6 @@ export const OptionButton = styled(BaseButton)<{ active?: boolean }>`
   width: 62px;
   font-size: 13px;
   padding: 0;
-  border-radius: 6px;
   color: ${({ theme }) => theme.text1};
   border: 1.5px solid
     ${({ theme, active }) => (active ? theme.border2 : theme.border1)};
@@ -204,7 +194,6 @@ export const EnterButton = styled(BaseButton)<{
   width: 100px;
   height: 26px;
   padding: 8px 16px;
-  border-radius: 5px;
   margin-bottom: 6px;
   background: transparent;
   background-color: ${({ theme }) => theme.primaryDarkBg};
@@ -228,13 +217,13 @@ export const PositionActionButton = styled(SecondaryButton)<{
   height: 30px;
   padding: 7px 0;
   margin-left: auto;
-  flex-direction: column;
+  border: 1px solid ${({ theme }) => theme.primaryPink};
 
-  color: ${({ theme }) => theme.text0};
-  background: ${({ theme }) => theme.bg3};
+  color: ${({ theme }) => theme.primaryPink};
+  background: ${({ theme }) => theme.bgPink1};
 
   &:hover {
-    background: ${({ theme }) => lighten(0.05, theme.bg3)};
+    background: ${({ theme }) => lighten(0.03, theme.bgPink1)};
   }
 
   ${({ expired, theme }) =>
@@ -251,12 +240,12 @@ export const PositionActionButton = styled(SecondaryButton)<{
   ${({ liquidatePending, theme }) =>
     liquidatePending &&
     `
-    color: ${theme.red1};
-    background: ${theme.red5};
-    border-color: ${theme.red1};
+    color: ${theme.darkPink};
+    background: ${theme.bgWarning};
+    border-color: ${theme.warning};
 
     &:hover {
-    background: ${lighten(0.05, theme.red5)};
+    background: ${lighten(0.2, theme.warning)};
   }`}
 
   ${({ theme }) => theme.mediaWidth.upToMedium`

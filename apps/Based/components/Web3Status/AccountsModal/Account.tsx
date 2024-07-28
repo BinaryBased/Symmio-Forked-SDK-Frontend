@@ -18,7 +18,6 @@ const AccountWrapper = styled.div<{ active?: boolean }>`
   padding: 12px;
   height: 82px;
   margin: 8px 0px;
-  border-radius: 3px;
   background: ${({ theme, active }) => (active ? theme.bg6 : theme.bg3)};
   border: 1px solid ${({ theme, active }) => (active ? theme.text0 : theme.bg7)};
   z-index: ${Z_INDEX.tooltip};

@@ -7,6 +7,8 @@ import {
   TradeSummary,
   TransferBalanceSummary,
   SignSummary,
+  StakeSummary,
+  ClaimSummary,
 } from "components/TransactionItem";
 import {
   TransactionInfo,
@@ -44,5 +46,9 @@ export default function TransactionSummary({
       return <SignSummary info={info} />;
     case TransactionType.MINT:
       return <MintSummary info={info} status={status} />;
+    case TransactionType.STAKE:
+      return <StakeSummary info={info} />;
+    case TransactionType.CLAIM:
+      return <ClaimSummary />;
   }
 }

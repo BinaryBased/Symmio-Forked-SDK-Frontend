@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { lighten } from "polished";
 
 import { Account as AccountType } from "@symmio/frontend-sdk/types/user";
 
@@ -11,10 +12,19 @@ import CreateAccountModal from "components/ReviewModal/CreateAccountModal";
 import Account from "./Account";
 import {
   useCreateAccountModalToggle,
+  useDepositModalToggle,
   useModalOpen,
 } from "@symmio/frontend-sdk/state/application/hooks";
 import { ApplicationModal } from "@symmio/frontend-sdk/state/application/reducer";
 import { useBalanceInfos } from "@symmio/frontend-sdk/hooks/useAccounts";
+import {
+  DepositButton,
+  DepositButtonLabel,
+  DepositButtonWrapper,
+} from "components/App/AccountData/CreateAccount";
+import { useCollateralToken } from "@symmio/frontend-sdk/constants";
+import { useGetTokenWithFallbackChainId } from "@symmio/frontend-sdk/utils/token";
+import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 
 const HoverWrapper = styled.div`
   padding: 0px 8px 12px 8px;
@@ -24,8 +34,7 @@ const HoverWrapper = styled.div`
   top: 48px;
   right: 0;
   background: ${({ theme }) => theme.bg1};
-  border: 2px solid ${({ theme }) => theme.border3};
-  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.border3};
   overflow: scroll;
 `;
 
@@ -33,22 +42,20 @@ const GradientButtonWrapper = styled.div`
   padding: 1px;
   height: 40px;
   margin-top: 10px;
-  border-radius: 4px;
   width: unset;
-  background: ${({ theme }) => theme.gradLight};
+  background: ${({ theme }) => theme.primaryPink};
 `;
 
 const GradientColorButton = styled(RowCenter)<{ disabled?: boolean }>`
   flex-wrap: nowrap;
   height: 100%;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.bg1};
+  background: ${({ theme }) => theme.bgPink1};
 
   &:focus,
   &:hover,
   &:active {
     cursor: ${({ disabled }) => !disabled && "pointer"};
-    background: ${({ theme }) => theme.bg2};
+    background: ${({ theme }) => lighten(0.03, theme.bgPink1)};
   }
 `;
 
@@ -56,9 +63,7 @@ const GradientButtonLabel = styled.span`
   font-weight: 600;
   font-size: 12px;
   line-height: 14px;
-  background: ${({ theme }) => theme.gradLight};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: ${({ theme }) => theme.primaryPink};
 `;
 
 export default function AccountsModal({
@@ -68,11 +73,19 @@ export default function AccountsModal({
   data: AccountType[];
   onDismiss: () => void;
 }) {
+  const { chainId } = useActiveWagmi();
   const activeAccountAddress = useActiveAccountAddress();
   const dispatch = useAppDispatch();
+  const toggleDepositModal = useDepositModalToggle();
   const showCreateAccountModal = useModalOpen(ApplicationModal.CREATE_ACCOUNT);
   const toggleCreateAccountModal = useCreateAccountModalToggle();
   const { balanceInfo, balanceInfoStatus } = useBalanceInfos();
+
+  const COLLATERAL_TOKEN = useCollateralToken();
+  const collateralCurrency = useGetTokenWithFallbackChainId(
+    COLLATERAL_TOKEN,
+    chainId
+  );
 
   const onClick = (account: AccountType) => {
     dispatch(updateAccount(account));
@@ -98,6 +111,13 @@ export default function AccountsModal({
             />
           );
         })}
+        <DepositButtonWrapper>
+          <DepositButton onClick={() => toggleDepositModal()}>
+            <DepositButtonLabel>
+              Deposit {collateralCurrency?.symbol}
+            </DepositButtonLabel>
+          </DepositButton>
+        </DepositButtonWrapper>
         <GradientButtonWrapper onClick={toggleCreateAccountModal}>
           <GradientColorButton>
             <GradientButtonLabel>Create New Account</GradientButtonLabel>

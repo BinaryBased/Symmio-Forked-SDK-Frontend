@@ -23,9 +23,10 @@ export const InputField = styled.input<{
   -webkit-background-clip: text;
   -webkit-text-fill-color: ${({ calculationMode }) =>
     calculationMode ? "transparent" : "unset"};
+  font-family: Chakra Petch;
   font-size: 16px;
   font-weight: 600;
-  color: ${({ theme }) => theme.text0};
+  color: ${({ theme }) => theme.text2};
   text-align: left;
 
   @keyframes blink {

@@ -1,24 +1,49 @@
 import React from "react";
 
 export default function Analytics({
-  size,
+  width = 28,
+  height = 18,
   ...rest
 }: {
-  size: number;
+  width?: number;
+  height?: number;
   [x: string]: any;
 }) {
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox="0 0 20 13"
+      width={width}
+      height={height}
+      viewBox="0 0 28 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...rest}
     >
-      <path
-        d="M14.1667 0.859375C13.7064 0.859375 13.3333 1.24313 13.3333 1.71652C13.3333 2.18991 13.7064 2.57367 14.1667 2.57367H17.1548L11.25 8.64718L7.67259 4.96754C7.34715 4.6328 6.81951 4.6328 6.49408 4.96754L0.244078 11.3961C-0.0813592 11.7309 -0.0813592 12.2736 0.244078 12.6083C0.569515 12.9431 1.09715 12.9431 1.42259 12.6083L7.08333 6.78582L10.6607 10.4655C10.9862 10.8002 11.5138 10.8002 11.8393 10.4655L18.3333 3.78581V6.8594C18.3333 7.33279 18.7064 7.71655 19.1667 7.71655C19.6269 7.71655 20 7.33279 20 6.8594V1.71652C20 1.24313 19.6269 0.859375 19.1667 0.859375H14.1667Z"
-        fill="#EBEBEC"
+      <rect
+        x="1"
+        y="9"
+        width="6"
+        height="8"
+        fill="#123378"
+        stroke="#123378"
+        strokeWidth="2"
+      />
+      <rect
+        x="11"
+        y="4"
+        width="6"
+        height="13"
+        fill="#123378"
+        stroke="#123378"
+        strokeWidth="2"
+      />
+      <rect
+        x="21"
+        y="1"
+        width="6"
+        height="16"
+        fill="#6092F2"
+        stroke="#123378"
+        strokeWidth="2"
       />
     </svg>
   );

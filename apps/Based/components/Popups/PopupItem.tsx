@@ -15,7 +15,6 @@ const Wrapper = styled.div`
   width: 100%;
   margin-bottom: 10px;
   background: ${({ theme }) => theme.bg0};
-  border-radius: 10px;
   border: 1px solid ${({ theme }) => theme.border2};
 `;
 

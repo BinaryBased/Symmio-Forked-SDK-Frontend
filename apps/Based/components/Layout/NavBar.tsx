@@ -161,7 +161,6 @@ const CooldownWrapper = styled(Column)<{ width?: string }>`
 `;
 
 const BannerWrapper = styled.div`
-  margin-top: 15px;
   padding: 0px 8px;
 `;
 

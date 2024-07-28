@@ -24,7 +24,7 @@ export const Label = styled(RowStart)<{ size?: string }>`
   justify-self: start;
   font-weight: 400;
   width: 50%;
-  color: ${({ theme }) => theme.text3};
+  color: ${({ theme }) => theme.text1};
   ${({ theme }) => theme.mediaWidth.upToMedium`
     font-size: 12px;
   `};

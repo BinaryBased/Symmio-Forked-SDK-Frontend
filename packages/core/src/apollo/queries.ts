@@ -85,3 +85,11 @@ export const GET_PAID_AMOUNT = gql`
     }
   }
 `;
+
+export const TotalTradingFee = gql`
+  query TotalTradingFee($account: String!) {
+    totalHistories(where: { accountSource: $account }) {
+      platformFee
+    }
+  }
+`;

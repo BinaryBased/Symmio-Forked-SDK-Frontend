@@ -67,9 +67,9 @@ const InfoBox = styled(RowCenter)`
   font-weight: 500;
   font-size: 12px;
   height: 30px;
-  border-radius: 4px;
-  color: ${({ theme }) => theme.text0};
-  background: ${({ theme }) => theme.bg4};
+  color: ${({ theme }) => theme.primaryBlue1};
+  background: ${({ theme }) => theme.bg9};
+  border: 1px solid ${({ theme }) => theme.primaryBlue1};
 `;
 
 const Title = styled.div`

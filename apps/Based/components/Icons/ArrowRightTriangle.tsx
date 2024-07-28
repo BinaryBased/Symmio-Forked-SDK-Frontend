@@ -3,7 +3,7 @@ import React from "react";
 export default function ArrowRightTriangle({
   width = 7,
   height = 12,
-  color = "#EBEBEC",
+  color = "#123378",
   ...rest
 }: {
   width?: number;

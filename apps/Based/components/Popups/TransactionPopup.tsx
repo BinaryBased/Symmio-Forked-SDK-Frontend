@@ -29,7 +29,6 @@ const Wrapper = styled(Row)<{ success?: boolean; color: string }>`
     success ? theme.bg4 : theme.bgWarning};
   color: ${({ color }) => color};
   border: 1px solid ${({ color }) => color};
-  border-radius: 4px;
 `;
 
 const Text = styled(RowStart)`

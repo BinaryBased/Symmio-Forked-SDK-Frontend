@@ -9,7 +9,8 @@ import { RowCenter } from "components/Row";
 
 const Wrapper = styled(RowCenter)`
   position: relative;
-  background: ${({ theme }) => theme.primary1};
+  background: ${({ theme }) => theme.bg0};
+  border: 1px solid ${({ theme }) => theme.border1};
   padding: 8px 0;
   gap: 24px;
   z-index: ${Z_INDEX.sticky};

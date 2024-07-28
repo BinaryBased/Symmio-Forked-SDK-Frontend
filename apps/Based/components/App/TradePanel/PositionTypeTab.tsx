@@ -19,12 +19,20 @@ export default function PositionTypeTab() {
       label: PositionType.LONG,
       content: (
         <RowCenter>
-          <div>Long</div>
+          <div
+            style={{
+              color: `${
+                positionType === PositionType.LONG ? theme.green1 : theme.text4
+              }`,
+            }}
+          >
+            Long
+          </div>
           <LongArrow
             width={16}
             height={12}
             color={
-              positionType === PositionType.LONG ? theme.text0 : theme.text4
+              positionType === PositionType.LONG ? theme.green1 : theme.text4
             }
             style={{ marginLeft: "8px" }}
           />
@@ -35,12 +43,20 @@ export default function PositionTypeTab() {
       label: PositionType.SHORT,
       content: (
         <RowCenter>
-          <div>Short</div>
+          <div
+            style={{
+              color: `${
+                positionType === PositionType.SHORT ? theme.red1 : theme.text4
+              }`,
+            }}
+          >
+            Short
+          </div>
           <ShortArrow
             width={16}
             height={12}
             color={
-              positionType === PositionType.SHORT ? theme.text0 : theme.text4
+              positionType === PositionType.SHORT ? theme.red1 : theme.text4
             }
             style={{ marginLeft: "8px" }}
           />
@@ -54,6 +70,7 @@ export default function PositionTypeTab() {
       tabOptions={options}
       activeOption={positionType}
       onChange={onChange}
+      outerBorder
     />
   );
 }

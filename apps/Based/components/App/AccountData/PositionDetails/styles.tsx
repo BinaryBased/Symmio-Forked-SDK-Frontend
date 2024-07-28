@@ -16,8 +16,7 @@ import { ChevronDown } from "components/Icons";
 export const Wrapper = styled(Column)`
   width: 100%;
   overflow-y: auto;
-  border-radius: 0px 0px 4px 4px;
-  background: ${({ theme }) => theme.bg0};
+  background: ${({ theme }) => theme.bg1};
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -46,10 +45,11 @@ export const TopWrap = styled(RowComponent)<{
 }>`
   height: 50px;
   padding: 13px 12px 10px;
+  background: ${({ theme }) => theme.bg1};
   cursor: ${({ mobileVersion }) => (mobileVersion ? "pointer" : "unset")};
   ${({ theme, expand }) => theme.mediaWidth.upToMedium`
     height: unset;
-    background: ${expand ? theme.bg3 : theme.bg2};
+    background: ${expand ? theme.bg3 : theme.bg1};
   `};
 `;
 
@@ -58,7 +58,7 @@ export const DataWrap = styled.div`
   padding: 4px 12px;
   flex-flow: column nowrap;
   position: relative;
-  background: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bg0};
   ${({ theme }) => theme.mediaWidth.upToMedium`
     background: ${theme.bg1};
   `};
@@ -89,7 +89,7 @@ export const FlexColumn = styled(Column)<{ flex: number; alignItems: string }>`
 export const ContentWrapper = styled(DataWrap)`
   margin-top: 1px;
   margin-bottom: 35px;
-  background: ${({ theme }) => theme.bg0};
+  background: ${({ theme }) => theme.bg1};
   ${({ theme }) => theme.mediaWidth.upToMedium`
     background: ${theme.bg3};
     margin-bottom: unset;
@@ -112,7 +112,7 @@ export const PositionInfoBox = styled(RowBetween)`
   height: 40px;
   font-weight: 500;
   font-size: 12px;
-  border-radius: 6px;
+  color: ${({ theme }) => theme.primaryPink};
 `;
 
 export const MarketName = styled(RowStart)<{ expired?: boolean }>`
@@ -135,22 +135,21 @@ export const Leverage = styled(RowCenter)`
   height: 20px;
   font-weight: 600;
   font-size: 10px;
-  border-radius: 2px;
   margin-left: 10px;
-  color: ${({ theme }) => theme.primaryBlue};
+  color: ${({ theme }) => theme.primaryPink};
   background: ${({ theme }) => theme.bg4};
 `;
 
-export const QuoteData = styled(Row)`
+export const QuoteData = styled(Row)<{ longOrShort: boolean }>`
   width: 63px;
   height: 20px;
   gap: 5px;
   font-weight: 500;
   font-size: 10px;
   padding: 0px 4px;
-  border-radius: 2px;
   margin-left: 8px;
-  color: ${({ theme }) => theme.text0};
+  color: ${({ theme, longOrShort }) =>
+    longOrShort ? theme.green1 : theme.red1};
   background: ${({ theme }) => theme.bg4};
 `;
 
@@ -158,7 +157,7 @@ export const Label = styled.div`
   font-weight: 400;
   font-size: 14px;
   justify-self: start;
-  color: ${({ theme }) => theme.text3};
+  color: ${({ theme }) => theme.text1};
   ${({ theme }) => theme.mediaWidth.upToMedium`
     font-size: 12px;
   `};
@@ -189,15 +188,6 @@ export const PositionPnl = styled(PnlValue)`
     font-size: 12px;
   `};
 `;
-
-// const ArrowWrap = styled.div`
-//   width: 36px;
-//   height: 20px;
-//   cursor: pointer;
-//   border-radius: 2px;
-//   padding: 0px 12px;
-//   background: ${({ theme }) => theme.bg5};
-// `
 
 export const PreviousIcon = styled(NextIcon)`
   rotate: 180deg;

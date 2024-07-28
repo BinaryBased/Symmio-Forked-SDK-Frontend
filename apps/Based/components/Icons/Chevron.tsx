@@ -3,7 +3,7 @@ import React from "react";
 export default function ChevronDown({
   width = 10,
   height = 7,
-  color = "#5F6064",
+  color = "#788EBA",
   ...rest
 }: {
   width: number;

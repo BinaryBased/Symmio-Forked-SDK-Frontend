@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled, { useTheme } from "styled-components";
 import { lighten } from "polished";
 import React, { useEffect, useMemo, useState } from "react";
@@ -46,7 +47,6 @@ import {
   EmptyPosition,
   Loader,
   LongArrow,
-  LottieCloverfield,
   NotConnectedWallet,
   Rectangle,
   ShortArrow,
@@ -87,6 +87,10 @@ const TableStructure = styled(RowBetween)<{ active?: boolean }>`
     &:first-child {
       width: 20%;
     }
+    &:nth-last-child(2) {
+      width: 15%;
+      text-align: right;
+    }
   }
 `;
 
@@ -114,19 +118,19 @@ const QuoteWrap = styled(TableStructure)<{
 }>`
   @keyframes blinking {
     from {
-      background: #242836;
+      background: #c6cede;
     }
 
     to {
-      background: #292c3b;
+      background: #bec7da;
     }
   }
   height: 40px;
   opacity: ${({ canceled }) => (canceled ? 0.5 : 1)};
   color: ${({ theme, liquidatePending }) =>
-    liquidatePending ? theme.red1 : theme.text0};
+    liquidatePending ? theme.darkPink : theme.text0};
   background: ${({ theme, custom, liquidatePending }) =>
-    liquidatePending ? theme.red5 : custom ? custom : theme.bg2};
+    liquidatePending ? theme.bgPink : custom ? custom : theme.bg5};
   font-weight: 500;
   cursor: pointer;
   animation: ${({ pending, liquidatePending }) =>
@@ -134,8 +138,12 @@ const QuoteWrap = styled(TableStructure)<{
 
   &:hover {
     animation: none;
-    background: ${({ theme, custom }) =>
-      custom ? lighten(0.05, custom) : theme.bg6};
+    background: ${({ theme, custom, liquidatePending }) =>
+      liquidatePending
+        ? lighten(0.2, theme.primaryPink)
+        : custom
+        ? lighten(0.05, custom)
+        : theme.bg8};
   }
 `;
 
@@ -180,7 +188,7 @@ const ExpiredStatusValue = styled.div`
 `;
 
 const LiquidatedStatusValue = styled.div`
-  color: ${({ theme }) => theme.red1};
+  color: ${({ theme }) => theme.primaryPink};
   font-size: 10px;
 `;
 
@@ -213,39 +221,47 @@ const HEADERS2 = [
   "Market price",
   "Open Price",
   "Status/uPNL",
-  "tp/sl",
+  "TP/SL",
   "Actions",
+];
+const HEADERS_PENDING = [
+  "Symbol-QID",
+  "Size",
+  "Position Value",
+  "Open Price",
+  "Status/uPNL",
+  "TP/SL",
+  "Action",
 ];
 
 function TableHeader({
   mobileVersion,
+  isPending,
 }: {
   mobileVersion: boolean;
+  isPending?: boolean;
 }): JSX.Element | null {
   const tpSlAvailable = useTpSlAvailable();
 
   if (mobileVersion) return null;
   let HEADERS = HEADERS1;
   if (tpSlAvailable) {
-    HEADERS = HEADERS2;
+    if (isPending) {
+      HEADERS = HEADERS_PENDING;
+    } else {
+      HEADERS = HEADERS2;
+    }
   }
   return (
     <HeaderWrap>
       {HEADERS.map((item, key) => {
-        if (item === "Status/uPNL") {
-          return (
-            <div style={{ width: "15%" }} key={key}>
-              {item}
-            </div>
-          );
-        } else {
-          return <div key={key}>{item}</div>;
-        }
+        return <div key={key}>{item}</div>;
       })}
       <div style={{ width: "16px", height: "100%", paddingTop: "10px" }}></div>
     </HeaderWrap>
   );
 }
+
 function TableRow({
   quote,
   index,
@@ -420,7 +436,12 @@ function TableBody({
           </EmptyRow>
         ) : loading === ApiState.LOADING ? (
           <EmptyRow style={{ padding: "60px 0px" }}>
-            <LottieCloverfield width={72} height={78} />
+            <Image
+              src={"/static/images/etc/SimpleLogo.svg"}
+              alt="Asset"
+              width={72}
+              height={78}
+            />
           </EmptyRow>
         ) : quotes.length ? (
           quotes.map((quote, index) => (
@@ -626,7 +647,6 @@ function QuoteRow({
   return useMemo(
     () => (
       <>
-        {" "}
         <QuoteWrap
           canceled={quoteStatus === QuoteStatus.CANCELED}
           onClick={() => setQuoteDetail(quote)}
@@ -641,13 +661,13 @@ function QuoteRow({
                 <LongArrow
                   width={15}
                   height={12}
-                  color={liquidatePending ? theme.text0 : theme.green1}
+                  color={liquidatePending ? theme.primaryPink : theme.green1}
                 />
               ) : (
                 <ShortArrow
                   width={15}
                   height={12}
-                  color={liquidatePending ? theme.text0 : theme.red1}
+                  color={liquidatePending ? theme.primaryPink : theme.red1}
                 />
               )}
             </PositionTypeWrap>
@@ -677,11 +697,18 @@ function QuoteRow({
               ? "-"
               : `${formatDollarAmount(notionalValue)}`}
           </div>
-          <div>
-            {toBN(quoteMarketPrice).isEqualTo(0)
-              ? "-"
-              : `$${formatPrice(quoteMarketPrice, pricePrecision, true)}`}
-          </div>
+
+          {![
+            QuoteStatus.PENDING,
+            QuoteStatus.CANCEL_PENDING,
+            QuoteStatus.LOCKED,
+          ].includes(quoteStatus) ? (
+            <div>
+              {toBN(quoteMarketPrice).isEqualTo(0)
+                ? "-"
+                : `$${formatPrice(quoteMarketPrice, pricePrecision, true)}`}
+            </div>
+          ) : null}
           {quoteStatus === QuoteStatus.CLOSE_PENDING ? (
             <TwoColumn>
               <div>{quoteOpenPrice}</div>
@@ -701,7 +728,7 @@ function QuoteRow({
             liquidatePending ? (
               <LiquidatedStatusValue>Liquidation...</LiquidatedStatusValue>
             ) : quoteStatus === QuoteStatus.OPENED ? (
-              <PnlValue color={color} style={{ width: "15%" }}>
+              <PnlValue color={color}>
                 {value === "-"
                   ? value
                   : `${value} (${Math.abs(Number(upnlPercent))})%`}
@@ -812,7 +839,7 @@ function QuoteRow({
       customColor,
       liquidatePending,
       positionType,
-      theme.text0,
+      theme.primaryPink,
       theme.green1,
       theme.red1,
       theme.warning,
@@ -853,7 +880,13 @@ function QuoteRow({
   );
 }
 
-export default function Positions({ quotes }: { quotes: Quote[] }) {
+export default function Positions({
+  quotes,
+  isPending,
+}: {
+  quotes: Quote[];
+  isPending?: boolean;
+}) {
   const [showCloseModal, setShowCloseModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const isMobile = useIsMobile();
@@ -877,7 +910,7 @@ export default function Positions({ quotes }: { quotes: Quote[] }) {
       )}
 
       <Wrapper>
-        <TableHeader mobileVersion={isMobile} />
+        <TableHeader mobileVersion={isMobile} isPending={isPending} />
         <TableBody
           quotes={quotes}
           setQuote={setQuote}

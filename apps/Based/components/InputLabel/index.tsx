@@ -14,15 +14,13 @@ export const Wrapper = styled(RowBetween)`
   height: 44px;
   font-weight: 400;
   white-space: nowrap;
-  background: ${({ theme }) => theme.bg3};
+  background: ${({ theme }) => theme.bg7};
   position: relative;
-  border-radius: 4px;
-  padding: 2px;
-  padding-left: 12px;
+  border: 1px solid ${({ theme }) => theme.border1};
 `;
 
 const DisplayLabelWrapper = styled(Wrapper)`
-  padding: 2px;
+  padding: 0px 2px;
 `;
 
 const NumericalWrapper = styled(RowBetween)`
@@ -32,10 +30,11 @@ const NumericalWrapper = styled(RowBetween)`
   height: 100%;
   position: relative;
   margin-left: 12px;
+  padding: 0px 14px 0px 12px;
   color: ${({ theme }) => theme.text0};
-  background: ${({ theme }) => theme.bg2};
-  border-radius: 4px;
-  padding: 0 12px;
+  background: ${({ theme }) => theme.bg7};
+  border-left: 1px solid ${({ theme }) => theme.border1};
+
   ${({ theme }) => theme.mediaWidth.upToSmall`
     font-size: 12px;
     right: 0;
@@ -46,10 +45,6 @@ export const CurrencySymbol = styled.div<{ active?: any }>`
   font-size: 16px;
   font-weight: 500;
   color: ${({ theme }) => theme.text0};
-
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    // font-size: 12px;
-  `}
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`
@@ -78,11 +73,11 @@ const DataWrap = styled(RowEnd)`
   font-size: 16px;
   max-width: 282px;
   font-weight: 500;
-  white-space: normal;
   padding-right: 10px;
-  border-radius: 4px;
+  white-space: normal;
+  border-left: 1px solid ${({ theme }) => theme.border1};
   color: ${({ theme }) => theme.text0};
-  background: ${({ theme }) => theme.bg2};
+  background: ${({ theme }) => theme.bg7};
   & > * {
     &:first-child {
       color: ${({ theme }) => theme.text5};

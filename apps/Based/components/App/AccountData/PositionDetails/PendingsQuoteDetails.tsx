@@ -129,7 +129,7 @@ export default function PendingQuoteDetails({
                 <div>-Q{id}</div>
               </MarketName>
               <Leverage>{leverage}x</Leverage>
-              <QuoteData>
+              <QuoteData longOrShort={positionType === PositionType.LONG}>
                 {positionType}
 
                 {positionType === PositionType.LONG ? (
