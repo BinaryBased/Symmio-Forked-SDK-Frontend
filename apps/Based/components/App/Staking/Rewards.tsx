@@ -203,7 +203,6 @@ function ClaimRewardButton({
 
   const handleAction = useCallback(async () => {
     if (!claimCallback) {
-      // toast.error(stakeError)
       return;
     }
 
