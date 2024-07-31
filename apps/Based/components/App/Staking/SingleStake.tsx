@@ -8,29 +8,27 @@ import Cash from "/public/static/images/staking/Cash.svg";
 import Lovely from "/public/static/images/staking/Lovely.svg";
 import RectangleFading from "/public/static/images/staking/RectangleFading.svg";
 
+import { tryParseAmount } from "utils/parse";
+import useCurrencyLogo from "lib/hooks/useCurrencyLogo";
+
 import { Tab } from "components/Tab";
 import Column from "components/Column";
 import { InputBox } from "components/InputBox";
 import { DotFlashing } from "components/Icons";
 import MainButton from "components/Button/MainButton";
-import {
-  useBasedPrice,
-  useStakingData,
-  useStakingValue,
-} from "@symmio/frontend-sdk/hooks/useStakingData";
-import {
-  BASED_TOKEN,
-  STAKING_ADDRESS,
-  SupportedChainId,
-} from "@symmio/frontend-sdk/constants";
+import { SupportedChainId } from "@symmio/frontend-sdk/constants";
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
-import useCurrencyLogo from "lib/hooks/useCurrencyLogo";
-import { useStakeToken } from "@symmio/frontend-sdk/callbacks/useStakeToken";
+import { useStakeToken } from "../../../callbacks/useStakeToken";
 import { useApproveCallback } from "@symmio/frontend-sdk/lib/hooks/useApproveCallback";
 import { ApprovalState } from "@symmio/frontend-sdk/lib/hooks/useApproval";
 import { formatAmount, toBN } from "@symmio/frontend-sdk/utils/numbers";
 import { useCurrencyBalance } from "@symmio/frontend-sdk/lib/hooks/useCurrencyBalance";
-import { tryParseAmount } from "@symmio/frontend-sdk/utils/parse";
+import {
+  useBasedPrice,
+  useStakingData,
+  useStakingValue,
+} from "lib/hooks/useStakingData";
+import { BASED_TOKEN, STAKING_ADDRESS } from "constants/tokens";
 
 const Container = styled.div`
   padding: 16px;
@@ -320,8 +318,6 @@ function APR() {
     .div(toBN(totalSupply).times(basedPrice))
     .times(100);
   const aprValue = aprValue_usdbc.plus(aprValue_usdc);
-
-  console.log({ basedPrice, rewardRate_usdbc, rewardRate_usdc, totalSupply });
 
   return (
     <APRWrapper>

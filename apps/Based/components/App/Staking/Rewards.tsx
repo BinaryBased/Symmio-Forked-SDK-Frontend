@@ -1,34 +1,22 @@
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import BigNumber from "bignumber.js";
 
 import useCurrencyLogo from "lib/hooks/useCurrencyLogo";
 import { ApiState } from "@symmio/frontend-sdk/types/api";
-import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import {
   formatAmount,
-  formatCurrency,
-  fromWei,
+  formatDollarAmount,
 } from "@symmio/frontend-sdk/utils/numbers";
-import { AppThunkDispatch, useAppDispatch } from "@symmio/frontend-sdk/state";
-
-import { useAnalyticsApolloClient } from "@symmio/frontend-sdk/apollo/client/balanceHistory";
-import { useMultiAccountAddress } from "@symmio/frontend-sdk/state/chains";
-import { getTotalTradingFee } from "@symmio/frontend-sdk/state/hedger/thunks";
-import { ITotalTradingFee } from "@symmio/frontend-sdk/state/hedger/types";
-import {
-  useStakingData,
-  useStakingValue,
-} from "@symmio/frontend-sdk/hooks/useStakingData";
 
 import Column from "components/Column";
 import { RowBetween } from "components/Row";
 import { DotFlashing } from "components/Icons";
-import { FALLBACK_CHAIN_ID } from "constants/chains/chains";
 import { TransactionCallbackState } from "@symmio/frontend-sdk/utils/web3";
 import MainButton from "components/Button/MainButton";
-import { useClaimReward } from "@symmio/frontend-sdk/callbacks/useStakeToken";
+import { useClaimReward } from "../../../callbacks/useStakeToken";
+import useTotalTradingFee from "lib/hooks/useTotalTradingFee";
+import { useStakingData, useStakingValue } from "lib/hooks/useStakingData";
 
 const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.primaryPink};
@@ -105,32 +93,7 @@ export default function Rewards() {
 }
 
 function TradingFeeSection() {
-  const { chainId } = useActiveWagmi();
-  const [totalTrading, setTotalTrading] = useState("-");
-  const [tradingFeeStatus, setTradingFeeStatus] = useState<ApiState>(
-    ApiState.LOADING
-  );
-  const dispatch: AppThunkDispatch = useAppDispatch();
-  const client = useAnalyticsApolloClient();
-
-  const MULTI_ACCOUNT_ADDRESS = useMultiAccountAddress();
-  const multiAccountAddress =
-    MULTI_ACCOUNT_ADDRESS[chainId ?? FALLBACK_CHAIN_ID];
-
-  useEffect(() => {
-    setTradingFeeStatus(ApiState.LOADING);
-    dispatch(getTotalTradingFee({ chainId, multiAccountAddress, client }))
-      .unwrap()
-      .then((res: ITotalTradingFee) => {
-        const { platformFee } = res;
-        setTotalTrading(fromWei(platformFee));
-        setTradingFeeStatus(ApiState.OK);
-      })
-      .catch(() => {
-        setTotalTrading("");
-        setTradingFeeStatus(ApiState.ERROR);
-      });
-  }, [chainId, client, dispatch, multiAccountAddress]);
+  const { totalTradingFee, tradingFeeStatus } = useTotalTradingFee();
 
   return (
     <FeeWrapper>
@@ -139,7 +102,7 @@ function TradingFeeSection() {
         {tradingFeeStatus === ApiState.LOADING ? (
           <DotFlashing />
         ) : tradingFeeStatus === ApiState.OK ? (
-          `${formatAmount(totalTrading, 4, true)} USDbC`
+          `${formatAmount(totalTradingFee, 4, true)} USDbC`
         ) : (
           "- USDbC"
         )}
@@ -286,13 +249,3 @@ function ClaimRewardButton({
     />
   );
 }
-
-export const formatDollarAmount = (
-  amount: BigNumber.Value | undefined | null
-) => {
-  const formattedAmount = formatCurrency(amount, 4, true);
-  if (formattedAmount === "< 0.001") {
-    return "< 0.001";
-  }
-  return formattedAmount !== "-" ? `${formattedAmount}` : "-";
-};

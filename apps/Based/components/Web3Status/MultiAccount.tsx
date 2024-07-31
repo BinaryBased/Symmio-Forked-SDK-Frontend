@@ -208,7 +208,6 @@ const NetworkButton = styled(NavButton)`
 
   background: ${({ theme }) => theme.red6};
   border: 1px solid ${({ theme }) => theme.red2};
-  border-radius: 8px;
 `;
 
 const Chevron = styled(ChevronDown)<{ open: boolean }>`

@@ -1,18 +1,17 @@
+import { SupportedChainId } from "@symmio/frontend-sdk/constants";
+import { useSingleContractMultipleMethods } from "@symmio/frontend-sdk/lib/hooks/multicall";
+import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
+import useDebounce from "@symmio/frontend-sdk/lib/hooks/useDebounce";
+import { useSupportedChainId } from "@symmio/frontend-sdk/lib/hooks/useSupportedChainId";
+import { useUSDCAddress } from "@symmio/frontend-sdk/state/chains";
+import { getSingleWagmiResult } from "@symmio/frontend-sdk/utils/multicall";
+import { fromWei } from "@symmio/frontend-sdk/utils/numbers";
+import { QUOTER_V2_ABI, STAKING_ABI } from "constants/abi";
 import {
-  QUOTER_V2_ABI,
   QUOTER_V2_ADDRESS,
-  STAKING_ABI,
   STAKING_ADDRESS,
-  SupportedChainId,
   USDBC_ADDRESS,
-} from "../constants";
-import { useSingleContractMultipleMethods } from "../lib/hooks/multicall";
-import useActiveWagmi from "../lib/hooks/useActiveWagmi";
-import useDebounce from "../lib/hooks/useDebounce";
-import { useSupportedChainId } from "../lib/hooks/useSupportedChainId";
-import { useUSDCAddress } from "../state/chains";
-import { getSingleWagmiResult } from "../utils/multicall";
-import { fromWei } from "../utils/numbers";
+} from "constants/tokens";
 
 export function useStakingData(): {
   stakedAmount: string;
@@ -88,7 +87,6 @@ export function useStakingValue(): {
 
   const bn_rewardData_usdc = getSingleWagmiResult(data, 1) || [];
   const bn_rewardData_usdbc = getSingleWagmiResult(data, 2) || [];
-  console.log({ bn_rewardData_usdbc, bn_rewardData_usdc });
 
   return {
     totalSupply: fromWei(getSingleWagmiResult(data)),

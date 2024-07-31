@@ -100,8 +100,3 @@ export interface HedgerState {
   priceRangeStatus: ApiState;
   errorMessages: ErrorMessages;
 }
-
-export interface ITotalTradingFee {
-  platformFee: string;
-  __typename: string;
-}

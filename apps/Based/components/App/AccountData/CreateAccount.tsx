@@ -275,9 +275,7 @@ export default function CreateAccount({ onClose }: { onClose?: () => void }) {
           <DescriptionText>{`Create Account > Deposit ${collateralCurrency?.symbol} > Enjoy Trading`}</DescriptionText>
         )}
       </ContentWrapper>
-      {showTerms ? (
-        <TermsAndServices onDismiss={() => setShowTerms(false)} />
-      ) : null}
+      {showTerms && <TermsAndServices onDismiss={() => setShowTerms(false)} />}
     </Wrapper>
   );
 }

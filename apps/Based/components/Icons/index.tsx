@@ -60,6 +60,7 @@ export { default as Enter } from "./Enter";
 export { default as NavbarPattern } from "./NavbarPattern";
 export { default as AerodromeLogo } from "./AerodromeLogo";
 export { default as VelocimeterLogo } from "./VelocimeterLogo";
+export { default as RewardLogo } from "./RewardLogo";
 
 // for wrapping react feather icons
 export const IconWrapper = styled.div<{

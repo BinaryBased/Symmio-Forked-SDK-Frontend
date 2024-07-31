@@ -1,4 +1,3 @@
-import { StakeState } from "../../callbacks/useStakeToken";
 import { CloseQuote, PositionType, TradeState } from "../../types/trade";
 import { TransferTab } from "../../types/transfer";
 
@@ -25,8 +24,6 @@ export enum TransactionType {
   ADD_ACCOUNT,
   TRANSFER_COLLATERAL,
   SIGN_MESSAGE,
-  STAKE,
-  CLAIM,
 }
 
 interface BaseTransactionInfo {
@@ -82,16 +79,6 @@ export interface MintTransactionInfo extends BaseTransactionInfo {
   amount: string;
 }
 
-export interface StakeTransactionInfo extends BaseTransactionInfo {
-  type: TransactionType.STAKE;
-  amount: string;
-  action: StakeState;
-}
-
-export interface ClaimTransactionInfo extends BaseTransactionInfo {
-  type: TransactionType.CLAIM;
-}
-
 export type TransactionInfo =
   | ApproveTransactionInfo
   | TradeTransactionInfo
@@ -99,9 +86,7 @@ export type TransactionInfo =
   | AddAccountTransactionInfo
   | TransferCollateralTransactionInfo
   | MintTransactionInfo
-  | SignMessageTransactionInfo
-  | StakeTransactionInfo
-  | ClaimTransactionInfo;
+  | SignMessageTransactionInfo;
 
 export interface TransactionDetails {
   hash: string;

@@ -1,0 +1,25 @@
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Badges">
+<path id="Rectangle 273" d="M0 10C0 8.34315 1.34315 7 3 7H18V13H3C1.34315 13 0 11.6569 0 10Z" fill="#FB5FCF"/>
+<path id="Rectangle 277" d="M18 7H19V13H18C17.3509 11.0527 17.3509 8.94733 18 7Z" fill="url(#paint0_linear_922_946)"/>
+<rect id="Rectangle 278" x="19" y="7" width="1" height="6" fill="url(#paint1_linear_922_946)"/>
+<rect id="Rectangle 275" x="5.1665" y="7" width="1" height="6" fill="#AEE3FA"/>
+<rect id="Rectangle 276" x="7.5" y="7" width="0.833333" height="6" fill="#AEE3FA"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_922_946" x1="17" y1="9.9999" x2="19" y2="9.9999" gradientUnits="userSpaceOnUse">
+<stop stop-color="#738EEC"/>
+<stop offset="0.25" stop-color="#A2B5F3"/>
+<stop offset="0.479167" stop-color="#897DD4"/>
+<stop offset="0.734375" stop-color="#D65EEA"/>
+<stop offset="1" stop-color="#E23FBE"/>
+</linearGradient>
+<linearGradient id="paint1_linear_922_946" x1="19" y1="9.9999" x2="20" y2="9.9999" gradientUnits="userSpaceOnUse">
+<stop stop-color="#738EEC"/>
+<stop offset="0.25" stop-color="#A2B5F3"/>
+<stop offset="0.479167" stop-color="#897DD4"/>
+<stop offset="0.734375" stop-color="#D65EEA"/>
+<stop offset="1" stop-color="#E23FBE"/>
+</linearGradient>
+</defs>
+</svg>

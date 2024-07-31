@@ -1,23 +1,22 @@
-import { useCallback, useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
-import useActiveWagmi from "../lib/hooks/useActiveWagmi";
+import { useCallback, useMemo, useState } from "react";
+
+import { STAKING_ABI } from "constants/abi";
+import { Abi, Address, encodeFunctionData } from "viem";
+import { BASED_TOKEN, STAKING_ADDRESS } from "constants/tokens";
+
+import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import {
   createTransactionCallback,
   TransactionCallbackState,
-} from "../utils/web3";
-import { useSupportedChainId } from "../lib/hooks/useSupportedChainId";
-import { useTransactionAdder } from "../state/transactions/hooks";
-import { useExpertMode } from "../state/user/hooks";
-import { BASED_TOKEN, STAKING_ABI, STAKING_ADDRESS } from "../constants";
-import {
-  ClaimTransactionInfo,
-  StakeTransactionInfo,
-  TransactionType,
-} from "../state/transactions/types";
-import { Abi, Address, encodeFunctionData } from "viem";
+} from "@symmio/frontend-sdk/utils/web3";
+import { useSupportedChainId } from "@symmio/frontend-sdk/lib/hooks/useSupportedChainId";
+import { useTransactionAdder } from "@symmio/frontend-sdk/state/transactions/hooks";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
-import { useWagmiConfig } from "../state/chains";
-import { ConstructCallReturnType } from "../types/web3";
+import { useExpertMode } from "@symmio/frontend-sdk/state/user/hooks";
+import { useWagmiConfig } from "@symmio/frontend-sdk/state/chains";
+import { ConstructCallReturnType } from "@symmio/frontend-sdk/types/web3";
+import { TransactionInfo } from "@symmio/frontend-sdk/state/transactions/types";
 
 export enum StakeState {
   STAKE = "Stake",
@@ -41,7 +40,7 @@ export function useStakeToken(
 
   const functionName = activeTab === StakeState.STAKE ? "deposit" : "withdraw";
 
-  const constructCall = useCallback((): ConstructCallReturnType => {
+  const constructCall = useCallback(async (): ConstructCallReturnType => {
     try {
       if (!account || !chainId || !functionName || !isSupportedChainId) {
         throw new Error("Missing dependencies.");
@@ -49,7 +48,7 @@ export function useStakeToken(
       const value = new BigNumber(amount)
         .shiftedBy(BASED_TOKEN.decimals)
         .toFixed();
-      const args = [BigInt(value), account as Address];
+      const args = [value, account];
 
       console.log(args);
 
@@ -57,7 +56,7 @@ export function useStakeToken(
         args,
         functionName,
         config: {
-          account: account as Address,
+          account,
           to: STAKING_ADDRESS[chainId] as Address,
           data: encodeFunctionData({
             abi: STAKING_ABI as Abi,
@@ -82,11 +81,10 @@ export function useStakeToken(
       };
     }
 
-    const txInfo = {
-      type: TransactionType.STAKE,
-      action: activeTab,
-      amount,
-    } as StakeTransactionInfo;
+    const txInfo = {} as TransactionInfo;
+    const summary = `${
+      activeTab === StakeState.STAKE ? StakeState.STAKE : StakeState.UNSTAKE
+    } $BASED`;
 
     return {
       state: TransactionCallbackState.VALID,
@@ -99,7 +97,7 @@ export function useStakeToken(
           addRecentTransaction,
           txInfo,
           wagmiConfig,
-          undefined,
+          summary,
           userExpertMode
         ),
     };
@@ -108,7 +106,6 @@ export function useStakeToken(
     chainId,
     functionName,
     activeTab,
-    amount,
     constructCall,
     addTransaction,
     addRecentTransaction,
@@ -131,7 +128,7 @@ export function useClaimReward() {
     TransactionCallbackState.VALID
   );
 
-  const constructCall = useCallback((): ConstructCallReturnType => {
+  const constructCall = useCallback(async (): ConstructCallReturnType => {
     try {
       if (!account || !chainId || !functionName || !isSupportedChainId) {
         throw new Error("Missing dependencies.");
@@ -166,9 +163,8 @@ export function useClaimReward() {
       };
     }
 
-    const txInfo = {
-      type: TransactionType.CLAIM,
-    } as ClaimTransactionInfo;
+    const txInfo = {} as TransactionInfo;
+    const summary = "Claimed rewards";
 
     return {
       state: txStatus,
@@ -184,7 +180,7 @@ export function useClaimReward() {
           addRecentTransaction,
           txInfo,
           wagmiConfig,
-          undefined,
+          summary,
           userExpertMode
         );
       },

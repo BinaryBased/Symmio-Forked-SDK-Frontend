@@ -21,11 +21,7 @@ import { MainButton } from "components/Button";
 import useTradePage from "@symmio/frontend-sdk/hooks/useTradePage";
 import { DEFAULT_PRECISION } from "@symmio/frontend-sdk/constants/misc";
 import { calculateString } from "utils/calculationalString";
-import {
-  ErrorStateMessages,
-  InputField,
-  PositionType,
-} from "@symmio/frontend-sdk/types/trade";
+import { InputField, PositionType } from "@symmio/frontend-sdk/types/trade";
 import { ConnectionStatus } from "@symmio/frontend-sdk/types/api";
 import {
   useUserWhitelist,
@@ -37,6 +33,7 @@ import { WEB_SETTING } from "@symmio/frontend-sdk/config";
 import { useSendDelegateAccess } from "@symmio/frontend-sdk/hooks/useTpSl";
 import AnimatedButton from "components/Button/MainButton";
 import { toBN } from "@symmio/frontend-sdk/utils/numbers";
+import { ErrorStateMessages } from "types/trade";
 
 export default function TradeActionButtons(): JSX.Element | null {
   const validatedContext = useInvalidContext();

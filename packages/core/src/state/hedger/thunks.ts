@@ -15,7 +15,6 @@ import {
   DepthResponse,
   ErrorMessages,
   FundingRateRes,
-  ITotalTradingFee,
   MarketDepthData,
   MarketDepthMap,
   MarketInfoValue,
@@ -24,7 +23,7 @@ import {
   MarketsInfoRes,
   PriceRange,
 } from "./types";
-import { GET_PAID_AMOUNT, TotalTradingFee } from "../../apollo/queries";
+import { GET_PAID_AMOUNT } from "../../apollo/queries";
 import { toBN } from "../../utils/numbers";
 
 export const getMarkets = createAsyncThunk(
@@ -392,54 +391,6 @@ export const getPaidAmount = createAsyncThunk(
       console.error(error);
       throw new Error(`Unable to query Paid Amount from Client`);
     }
-  }
-);
-
-export const getTotalTradingFee = createAsyncThunk(
-  "user/getTotalDepositsAndWithdrawals",
-  async ({
-    chainId,
-    client,
-    multiAccountAddress,
-  }: {
-    chainId: number | undefined;
-    client: ApolloClient<NormalizedCacheObject>;
-    multiAccountAddress: string | undefined;
-  }) => {
-    if (!chainId) {
-      throw new Error("chainId is empty");
-    }
-    if (!client) {
-      throw new Error("Apollo client is not provided");
-    }
-    if (!multiAccountAddress) {
-      throw new Error("multi Account Address is not provided");
-    }
-
-    let response = {} as ITotalTradingFee;
-    try {
-      const { data: totalHistories } = await client.query<{
-        totalHistories: ITotalTradingFee[];
-      }>({
-        query: TotalTradingFee,
-        variables: { account: multiAccountAddress },
-        fetchPolicy: "cache-first",
-      });
-
-      response = totalHistories.totalHistories[0] as ITotalTradingFee;
-      const tempResponse = toBN(response.platformFee).plus(
-        toBN("138809569267057680890500")
-      ); // this number is total fee generated for previous subgraph
-
-      response = {
-        platformFee: tempResponse.toString(),
-        __typename: response.__typename,
-      };
-    } catch (error) {
-      console.error(error);
-      throw new Error(`Unable to query data from Client`);
-    }
-    return response;
   }
 );
 
