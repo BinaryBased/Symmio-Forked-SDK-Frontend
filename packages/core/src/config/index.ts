@@ -9,7 +9,7 @@ export const WEB_SETTING = {
   muonEnabled: true,
 
   showAccountHealthEmoji: true,
-  showColorfulAccountHealth: true,
+  showColorfulAccountHealth: false,
 
   checkWhiteList: false,
 

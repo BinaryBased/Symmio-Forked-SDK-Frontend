@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 9076">
+<rect id="Rectangle 15" x="0.5" y="0.5" width="23" height="23" fill="#D6DEEE" stroke="#123378"/>
+<g id="Group 9079">
+<g id="Union">
+<path d="M9 13H10V20H9V13Z" fill="#123378"/>
+<path d="M12 13V14H15V16H12V17H15V19H12V20H16V13H12Z" fill="#123378"/>
+</g>
+<path id="Union (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M8.79999 12.8H10.2V20.2H8.79999V12.8ZM9.19999 13.2V19.8H9.79999V13.2H9.19999ZM11.8 12.8H16.2V20.2H11.8V18.8H14.8V17.2H11.8V15.8H14.8V14.2H11.8V12.8ZM12.2 13.2V13.8H15.2V16.2H12.2V16.8H15.2V19.2H12.2V19.8H15.8V13.2H12.2Z" fill="#123378"/>
+</g>
+<rect id="Rectangle 16" width="24" height="10" fill="#123378"/>
+</g>
+</svg>
