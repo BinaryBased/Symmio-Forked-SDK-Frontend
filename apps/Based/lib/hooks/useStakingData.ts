@@ -7,6 +7,7 @@ import { useUSDCAddress } from "@symmio/frontend-sdk/state/chains";
 import { getSingleWagmiResult } from "@symmio/frontend-sdk/utils/multicall";
 import { fromWei } from "@symmio/frontend-sdk/utils/numbers";
 import { QUOTER_V2_ABI, STAKING_ABI } from "constants/abi";
+import { FALLBACK_CHAIN_ID } from "constants/chains/chains";
 import {
   QUOTER_V2_ADDRESS,
   STAKING_ADDRESS,
@@ -61,7 +62,6 @@ export function useStakingValue(): {
   rewardRate_usdc: string;
   rewardRate_usdbc: string;
 } {
-  const { chainId } = useActiveWagmi();
   const USDC_ADDRESS = useUSDCAddress();
 
   const contractDataCall = [
@@ -80,7 +80,7 @@ export function useStakingValue(): {
   ];
 
   const { data } = useSingleContractMultipleMethods(
-    chainId ? STAKING_ADDRESS[chainId] : "",
+    STAKING_ADDRESS[FALLBACK_CHAIN_ID],
     STAKING_ABI,
     contractDataCall
   );
@@ -96,8 +96,6 @@ export function useStakingValue(): {
 }
 
 export function useBasedPrice() {
-  const { chainId } = useActiveWagmi();
-
   const contractDataCall = [
     {
       functionName: "quoteExactInput",
@@ -109,7 +107,7 @@ export function useBasedPrice() {
   ];
 
   const { data, isLoading } = useSingleContractMultipleMethods(
-    chainId ? QUOTER_V2_ADDRESS[chainId] : "",
+    QUOTER_V2_ADDRESS[FALLBACK_CHAIN_ID],
     QUOTER_V2_ABI,
     contractDataCall
   );

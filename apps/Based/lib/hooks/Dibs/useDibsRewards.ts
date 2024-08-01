@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { FetchPolicy, DocumentNode } from "@apollo/client";
 import { BigNumber } from "@ethersproject/bignumber";
-import { erc20Abi } from "viem";
 
 import {
   TotalVolumeForDaysData,
@@ -9,6 +8,7 @@ import {
   UserRewardDataCustomDay,
 } from "apollo/queries";
 import { useDibsClient } from "apollo/client/dibs";
+import { BASED_ABI } from "constants/abi";
 
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import { BASED_ADDRESS, DIBS_REWARDER_ADDRESS } from "constants/tokens";
@@ -121,7 +121,7 @@ export function useIsRewardMinted(day: number | null) {
 
   const { data } = useSingleContractMultipleMethods(
     chainId ? BASED_ADDRESS[chainId] : "",
-    erc20Abi,
+    BASED_ABI,
     contractDataCall
   );
   return getSingleWagmiResult(data, 0);

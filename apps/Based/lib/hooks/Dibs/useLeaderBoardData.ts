@@ -40,16 +40,13 @@ const useLeaderBoardData = (selectedDay: number | null) => {
 
   const isMinted = useIsRewardMinted(selectedDay);
   useEffect(() => {
-    if (reward) {
-      setTotalReward(reward as BigNumber);
-    }
+    setTotalReward(reward as BigNumber);
 
     return () => setTotalReward(null);
   }, [reward, selectedDay]);
 
   const getDailyLeaderboardData = useCallback(
     async (epoch: number): Promise<LeaderBoardRecord[]> => {
-      if (!totalReward || !dibsClient) return [];
       let offset = 0;
       const result: DailyGeneratedVolumesRecord[] = [];
       let chunkResult: DailyGeneratedVolumesRecord[] = [];
@@ -78,7 +75,7 @@ const useLeaderBoardData = (selectedDay: number | null) => {
             volume: fromWeiBN(ele.amountAsUser),
             reward: fromWeiBN(
               BigNumber.from(ele.amountAsUser)
-                .mul(totalReward)
+                .mul(totalReward ?? 0)
                 .div(totalVolumeBN)
                 .toString()
             ),
