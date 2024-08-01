@@ -3,9 +3,10 @@ import { lighten } from "polished";
 
 import { Account as AccountType } from "@symmio/frontend-sdk/types/user";
 
-import { useAppDispatch } from "@symmio/frontend-sdk/state";
-import { updateAccount } from "@symmio/frontend-sdk/state/user/actions";
-import { useActiveAccountAddress } from "@symmio/frontend-sdk/state/user/hooks";
+import {
+  useActiveAccountAddress,
+  useSetActiveSubAccount,
+} from "@symmio/frontend-sdk/state/user/hooks";
 
 import { RowCenter } from "components/Row";
 import CreateAccountModal from "components/ReviewModal/CreateAccountModal";
@@ -75,11 +76,11 @@ export default function AccountsModal({
 }) {
   const { chainId } = useActiveWagmi();
   const activeAccountAddress = useActiveAccountAddress();
-  const dispatch = useAppDispatch();
   const toggleDepositModal = useDepositModalToggle();
   const showCreateAccountModal = useModalOpen(ApplicationModal.CREATE_ACCOUNT);
   const toggleCreateAccountModal = useCreateAccountModalToggle();
   const { balanceInfo, balanceInfoStatus } = useBalanceInfos();
+  const updateAccount = useSetActiveSubAccount();
 
   const COLLATERAL_TOKEN = useCollateralToken();
   const collateralCurrency = useGetTokenWithFallbackChainId(
@@ -88,7 +89,7 @@ export default function AccountsModal({
   );
 
   const onClick = (account: AccountType) => {
-    dispatch(updateAccount(account));
+    updateAccount(account.accountAddress, account.name);
     onDismiss();
   };
 
