@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
@@ -251,8 +251,12 @@ function TableRow({ topBorder, myRank, ...data }: IRowData) {
         </Badges>
       </Row>
       <Row width={"unset"}>
-        {truncateAddress(accountAddress)}
-        <Copy toCopy={accountAddress} text={""} />
+        {accountAddress && (
+          <React.Fragment>
+            {truncateAddress(accountAddress)}
+            <Copy toCopy={accountAddress} text={""} />
+          </React.Fragment>
+        )}
       </Row>
       <RowText>{tradeVolume ? formatDollarAmount(tradeVolume) : "-"}</RowText>
       <RowText>{potentialReward ? `${potentialReward} BASED` : "-"}</RowText>
@@ -343,8 +347,6 @@ export default function LeaderboardTable({ activeDay }: { activeDay: number }) {
     };
   });
 
-  console.log("leader board table", { activeDay, resultData });
-
   let myRank = (
     resultData.findIndex(
       (inputData) => inputData.accountAddress === account?.toLowerCase()
@@ -354,7 +356,7 @@ export default function LeaderboardTable({ activeDay }: { activeDay: number }) {
   if (resultData.length > 0 && myRank === "0") {
     resultData.push({
       rank: (resultData.length + 1).toString(),
-      accountAddress: account ?? " ",
+      accountAddress: account ?? "",
       accountName: "Your Account",
       tradeVolume: "",
       potentialReward: "-",

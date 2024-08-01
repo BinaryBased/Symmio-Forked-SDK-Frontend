@@ -4,15 +4,14 @@ import { DIBS_ABI } from "constants/abi";
 import { DIBS_REWARDER_ADDRESS } from "constants/tokens";
 import { RewardGetData } from "types/dibs";
 import { fromWeiBN } from "utils/number";
+import { FALLBACK_CHAIN_ID } from "constants/chains/chains";
 
-import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import { useSingleContractMultipleMethods } from "@symmio/frontend-sdk/lib/hooks/multicall";
 
 export const useUserRewardData = (
   { days, totalVolumesBN, result, user }: RewardGetData,
   dataLoading: boolean
 ) => {
-  const { chainId } = useActiveWagmi();
   const totalRewardsCall = days.map((day) => ({
     functionName: "totalReward",
     callInputs: [day.toString()],
@@ -25,7 +24,7 @@ export const useUserRewardData = (
 
   const allCalls = totalRewardsCall.concat(claimsCall);
   const { data: multiCallResult, isLoading } = useSingleContractMultipleMethods(
-    chainId ? DIBS_REWARDER_ADDRESS[chainId] : "",
+    DIBS_REWARDER_ADDRESS[FALLBACK_CHAIN_ID],
     DIBS_ABI,
     allCalls
   );

@@ -81,8 +81,6 @@ export default function Leaderboard() {
   const [customDay, setCustomDay] = useState(false);
   const { activeDay, setCustomActiveDay, getActiveDate } = useDibs();
 
-  console.log({ activeDay, customDay, showCalender });
-
   const ref_calender = useRef(null);
   useOnOutsideClick(ref_calender, () => setShowCalender(false));
 

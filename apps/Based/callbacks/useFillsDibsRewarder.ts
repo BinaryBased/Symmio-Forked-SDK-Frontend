@@ -1,3 +1,6 @@
+import { useCallback, useMemo } from "react";
+import { Abi, Address, encodeFunctionData } from "viem";
+
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import { useSupportedChainId } from "@symmio/frontend-sdk/lib/hooks/useSupportedChainId";
@@ -13,10 +16,8 @@ import {
   createTransactionCallback,
   TransactionCallbackState,
 } from "@symmio/frontend-sdk/utils/web3";
-import { DIBS_ABI } from "constants/abi";
-import { DIBS_REWARDER_ADDRESS } from "constants/tokens";
-import { useCallback, useMemo } from "react";
-import { Abi, Address, encodeFunctionData } from "viem";
+import { BASED_ABI } from "constants/abi";
+import { BASED_ADDRESS } from "constants/tokens";
 
 export function useFillDibsRewarder(day?: number): {
   state: TransactionCallbackState;
@@ -45,9 +46,9 @@ export function useFillDibsRewarder(day?: number): {
         functionName,
         config: {
           account: account as Address,
-          to: DIBS_REWARDER_ADDRESS[chainId] as Address,
+          to: BASED_ADDRESS[chainId] as Address,
           data: encodeFunctionData({
-            abi: DIBS_ABI as Abi,
+            abi: BASED_ABI as Abi,
             functionName,
             args,
           }),

@@ -1,11 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { BASED_ABI, DIBS_ABI } from "constants/abi";
+import { BigNumber } from "@ethersproject/bignumber";
+import { Address } from "viem";
+
 import { BASED_ADDRESS, DIBS_REWARDER_ADDRESS } from "constants/tokens";
 
 import { useSingleContractMultipleMethods } from "@symmio/frontend-sdk/lib/hooks/multicall";
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import { useSupportedChainId } from "@symmio/frontend-sdk/lib/hooks/useSupportedChainId";
 import { getSingleWagmiResult } from "@symmio/frontend-sdk/utils/multicall";
+import { FALLBACK_CHAIN_ID } from "constants/chains/chains";
 
 export function useDibs() {
   const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
@@ -94,11 +98,8 @@ export function useBasedStartTimestamp() {
 }
 
 export function useDibsInfo(selectedDay?: number | null) {
-  const { chainId } = useActiveWagmi();
-  const isSupportedChainId = useSupportedChainId();
-
-  const call = isSupportedChainId
-    ? selectedDay && selectedDay >= 0
+  const call =
+    selectedDay && selectedDay >= 0
       ? [
           {
             functionName: "PROJECT_ID",
@@ -114,11 +115,9 @@ export function useDibsInfo(selectedDay?: number | null) {
             functionName: "PROJECT_ID",
             callInputs: [],
           },
-        ]
-    : [];
-
+        ];
   const { data } = useSingleContractMultipleMethods(
-    chainId ? DIBS_REWARDER_ADDRESS[chainId] : "",
+    DIBS_REWARDER_ADDRESS[FALLBACK_CHAIN_ID],
     DIBS_ABI,
     call
   );
@@ -128,8 +127,8 @@ export function useDibsInfo(selectedDay?: number | null) {
 
   return useMemo(() => {
     return {
-      projectId,
-      totalReward,
+      projectId: projectId as Address,
+      totalReward: totalReward as BigNumber,
     };
   }, [projectId, totalReward]);
 }

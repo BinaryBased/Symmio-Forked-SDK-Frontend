@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 import { TotalTradingFee } from "apollo/queries";
 import { FALLBACK_CHAIN_ID } from "constants/chains/chains";
@@ -20,14 +19,15 @@ export default function useTotalTradingFee() {
   const MULTI_ACCOUNT_ADDRESS = useMultiAccountAddress();
   const multiAccountAddress =
     MULTI_ACCOUNT_ADDRESS[chainId ?? FALLBACK_CHAIN_ID];
-  const client: ApolloClient<NormalizedCacheObject> =
-    useAnalyticsApolloClient();
+  const client = useAnalyticsApolloClient(FALLBACK_CHAIN_ID);
   const [tradingFeeStatus, setTradingFeeStatus] = useState<ApiState>(
     ApiState.LOADING
   );
-  console.log(client);
 
   const [totalTradingFee, setTotalTradingFee] = useState("-");
+  const [retryCount, setRetryCount] = useState(0); // Add a state for retry count
+  const MAX_RETRIES = 3; // Maximum number of retries
+  const RETRY_DELAY = 3000; // Delay between retries in milliseconds (3 seconds)
 
   useEffect(() => {
     async function fetchTotalTradingFee() {
@@ -50,15 +50,21 @@ export default function useTotalTradingFee() {
 
         setTotalTradingFee(fromWei(tempResponse));
         setTradingFeeStatus(ApiState.OK);
+        setRetryCount(0); // Reset retry count on success
       } catch (error) {
         console.error(error);
         setTradingFeeStatus(ApiState.ERROR);
-        throw new Error(`Unable to query data from dibs Client`);
+
+        if (retryCount < MAX_RETRIES) {
+          setTimeout(() => {
+            setRetryCount(retryCount + 1);
+          }, RETRY_DELAY);
+        }
       }
     }
 
     fetchTotalTradingFee();
-  }, [client, multiAccountAddress]);
+  }, [client, multiAccountAddress, retryCount]);
 
   return { totalTradingFee, tradingFeeStatus };
 }

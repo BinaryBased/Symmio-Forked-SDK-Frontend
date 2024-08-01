@@ -16,6 +16,7 @@ import {
   useV3Ids,
 } from "@symmio/frontend-sdk/state/chains/hooks";
 import { useSetFEName } from "@symmio/frontend-sdk/state/user/hooks";
+import { FALLBACK_CHAIN_ID } from "constants/chains/chains";
 
 const Container = styled.div`
   display: inline-flex;
@@ -68,12 +69,12 @@ export default function Web3Network() {
   }, [MULTI_ACCOUNT_ADDRESS, chainId]);
 
   useEffect(() => {
+    const customChainId = chainId ?? FALLBACK_CHAIN_ID;
     if (
-      chainId &&
-      MULTI_ACCOUNT_ADDRESS[chainId] &&
-      Object.keys(MULTI_ACCOUNT_ADDRESS[chainId]).length === 1
+      MULTI_ACCOUNT_ADDRESS[customChainId] &&
+      Object.keys(MULTI_ACCOUNT_ADDRESS[customChainId]).length === 1
     ) {
-      setFrontEndName(Object.keys(MULTI_ACCOUNT_ADDRESS[chainId])[0]);
+      setFrontEndName(Object.keys(MULTI_ACCOUNT_ADDRESS[customChainId])[0]);
     }
   }, [MULTI_ACCOUNT_ADDRESS, chainId, setFrontEndName]);
 
