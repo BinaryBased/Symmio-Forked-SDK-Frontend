@@ -228,7 +228,7 @@ function TableRow({ topBorder, myRank, ...data }: IRowData) {
               alt={"rank medal"}
             />
           </RankShadow>
-          <div>
+          <div style={{ position: "relative", marginLeft: "1px" }}>
             <Image src={getRankImage(rank)} alt={"rank medal"} />
           </div>
           <RankNumber isCurrentAccount={isCurrentAccount} isTop={isTop}>
