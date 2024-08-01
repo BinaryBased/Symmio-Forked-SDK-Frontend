@@ -5,7 +5,6 @@ import { makeHttpRequest } from "../../utils/http";
 import { BALANCE_HISTORY_ITEMS_NUMBER } from "../../constants/misc";
 import {
   Account,
-  AccountUpnl,
   UserPartyAStatDetail,
   initialUserPartyAStatDetail,
 } from "../../types/user";
@@ -38,6 +37,7 @@ import {
   setAllHedgerData,
   removeHedger,
   toggleDefaultHedger,
+  updateAccount,
 } from "./actions";
 import { useHedgerInfo } from "../hedger/hooks";
 import useDebounce from "../../lib/hooks/useDebounce";
@@ -355,12 +355,6 @@ export function useIsTermsAccepted() {
   return isTermsAccepted;
 }
 
-export function useCustomAccountUpnl(account: string): AccountUpnl | undefined {
-  return useAppSelector((state) =>
-    (state.user.allAccountsUpnl || []).find((x: any) => x.account === account)
-  )?.upnl;
-}
-
 export function useSetFEName() {
   const dispatch = useAppDispatch();
   return useCallback(
@@ -424,4 +418,17 @@ export function useToggleDefaultHedgerCallback() {
   return useCallback(() => {
     dispatch(toggleDefaultHedger());
   }, [dispatch]);
+}
+
+export function useSetActiveSubAccount() {
+  const dispatch = useAppDispatch();
+
+  return useCallback(
+    (accountAddress?: string, name?: string) => {
+      dispatch(
+        updateAccount(accountAddress && name ? { accountAddress, name } : null)
+      );
+    },
+    [dispatch]
+  );
 }
