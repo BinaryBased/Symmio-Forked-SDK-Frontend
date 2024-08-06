@@ -38,7 +38,7 @@ import {
   useQuoteLeverage,
   useInstantCloseNotifications,
 } from "@symmio/frontend-sdk/hooks/useQuotes";
-import useInstantClose from "@symmio/frontend-sdk/hooks/useInstantClose";
+import useInstantActions from "@symmio/frontend-sdk/hooks/useInstantActions";
 import { useHedgerInfo } from "@symmio/frontend-sdk/state/hedger/hooks";
 import { useIsHavePendingTransaction } from "@symmio/frontend-sdk/state/transactions/hooks";
 
@@ -65,6 +65,7 @@ import {
 } from "@symmio/frontend-sdk/constants/misc";
 import { useInstantClosesData } from "@symmio/frontend-sdk/state/quotes/hooks";
 import { InstantCloseStatus } from "@symmio/frontend-sdk/state/quotes/types";
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
 
 const Wrapper = styled(Column)`
   padding: 12px;
@@ -324,16 +325,13 @@ export default function CloseModal({
       toast.error(error);
       return;
     }
-    try {
-      setAwaitingCloseConfirmation(true);
-      await closeCallback();
-      setAwaitingCloseConfirmation(false);
-      closeModal();
-    } catch (e) {
-      setAwaitingCloseConfirmation(false);
-      closeModal();
-      console.error(e);
+    setAwaitingCloseConfirmation(true);
+    const { status, message } = await closeCallback();
+    if (status !== TransactionStatus.SUCCESS) {
+      toast.error(message);
     }
+    setAwaitingCloseConfirmation(false);
+    closeModal();
   }, [closeCallback, error, closeModal]);
 
   const autoSlippage = market ? market.autoSlippage : MARKET_PRICE_COEFFICIENT;
@@ -565,11 +563,8 @@ export function useInstantClosePosition(
   id: number | undefined,
   closeModal?: () => void
 ) {
-  const { instantClose, isAccessDelegated, cancelClose } = useInstantClose(
-    size,
-    price,
-    id
-  );
+  const { instantClose, isAccessDelegated, cancelInstantAction } =
+    useInstantActions();
   const { callback: delegateAccessCallback, error } = useDelegateAccess();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -580,26 +575,30 @@ export function useInstantClosePosition(
   }, [isAccessDelegated]);
 
   const handleInstantClose = useCallback(async () => {
-    try {
-      if (!isAccessDelegated && delegateAccessCallback) {
-        setLoading(true);
-        setText("Delegating ...");
-        await delegateAccessCallback();
-        setLoading(false);
+    if (!isAccessDelegated && delegateAccessCallback) {
+      setLoading(true);
+      setText("Delegating ...");
+      const { status, message } = await delegateAccessCallback();
+      if (status !== TransactionStatus.SUCCESS) {
+        setText("Delegate Access");
+        toast.error(message);
       }
-    } catch (error) {
       setLoading(false);
-      setText("Delegate Access");
-      console.error(error);
     }
 
     if (!instantClose) {
       toast.error(error);
       return;
     }
+
+    if (!id || !price) {
+      toast.error("missing props");
+      return;
+    }
+
     try {
       setLoading(true);
-      await instantClose();
+      await instantClose(id, price, size);
       setLoading(false);
       closeModal && closeModal();
       toast.success("close sent to hedger");
@@ -610,25 +609,32 @@ export function useInstantClosePosition(
     }
   }, [
     instantClose,
+    id,
+    price,
     isAccessDelegated,
     delegateAccessCallback,
     error,
+    size,
     closeModal,
   ]);
 
   const handleCancelClose = useCallback(async () => {
-    if (!cancelClose) {
+    if (!cancelInstantAction) {
       toast.error(error);
       return;
     }
+    if (!id) {
+      toast.error("missing quote id");
+      return;
+    }
     try {
-      await cancelClose();
+      await cancelInstantAction(id);
     } catch (e) {
       setLoading(false);
       toast.error(e.message);
       console.error(e);
     }
-  }, [cancelClose, error]);
+  }, [cancelInstantAction, error, id]);
 
   return {
     handleInstantClose,
