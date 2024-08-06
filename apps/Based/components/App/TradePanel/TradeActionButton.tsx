@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { DotFlashing } from "components/Icons";
+import toast from "react-hot-toast";
+
+import { ErrorStateMessages } from "types/trade";
+import { calculateString } from "utils/calculationalString";
+
+import { toBN } from "@symmio/frontend-sdk/utils/numbers";
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
 import { useToggleOpenPositionModal } from "@symmio/frontend-sdk/state/application/hooks";
-import {
-  ContextError,
-  InvalidContext,
-  useInvalidContext,
-} from "components/InvalidContext";
-import ErrorButton from "components/Button/ErrorButton";
 import { useWebSocketStatus } from "@symmio/frontend-sdk/state/hedger/hooks";
 import {
   useSetLimitPrice,
@@ -17,10 +17,8 @@ import {
   usePositionType,
 } from "@symmio/frontend-sdk/state/trade/hooks";
 import { useIsHavePendingTransaction } from "@symmio/frontend-sdk/state/transactions/hooks";
-import { MainButton } from "components/Button";
 import useTradePage from "@symmio/frontend-sdk/hooks/useTradePage";
 import { DEFAULT_PRECISION } from "@symmio/frontend-sdk/constants/misc";
-import { calculateString } from "utils/calculationalString";
 import { InputField, PositionType } from "@symmio/frontend-sdk/types/trade";
 import { ConnectionStatus } from "@symmio/frontend-sdk/types/api";
 import {
@@ -30,10 +28,17 @@ import {
   useActiveAccountAddress,
 } from "@symmio/frontend-sdk/state/user/hooks";
 import { WEB_SETTING } from "@symmio/frontend-sdk/config";
-import { useSendDelegateAccess } from "@symmio/frontend-sdk/hooks/useTpSl";
+import { useTpSlDelegateAccesses } from "@symmio/frontend-sdk/callbacks/useDelegateAccesses";
+
+import { MainButton } from "components/Button";
+import ErrorButton from "components/Button/ErrorButton";
 import AnimatedButton from "components/Button/MainButton";
-import { toBN } from "@symmio/frontend-sdk/utils/numbers";
-import { ErrorStateMessages } from "types/trade";
+import { DotFlashing } from "components/Icons";
+import {
+  ContextError,
+  InvalidContext,
+  useInvalidContext,
+} from "components/InvalidContext";
 
 export default function TradeActionButtons(): JSX.Element | null {
   const validatedContext = useInvalidContext();
@@ -68,18 +73,17 @@ export default function TradeActionButtons(): JSX.Element | null {
       market ? [market.symbol, market.pricePrecision] : ["", DEFAULT_PRECISION],
     [market]
   );
-  const { callback: setDelegateAccessCallBack, error } =
-    useSendDelegateAccess();
+  const { setDelegateAccessCallBack, error } = useTpSlDelegateAccesses();
 
   const handleDelegateAccess = useCallback(async () => {
     if (error) console.debug({ error });
     if (!setDelegateAccessCallBack) return;
-    try {
-      setDelegateLoading(true);
-      const txHash = await setDelegateAccessCallBack();
-      console.log({ txHash });
-    } catch (e) {
-      console.error(e);
+
+    setDelegateLoading(true);
+    const { status, message } = await setDelegateAccessCallBack();
+    if (status !== TransactionStatus.SUCCESS) {
+      toast.error(message);
+      setDelegateLoading(false);
     }
   }, [error, setDelegateAccessCallBack]);
 

@@ -20,7 +20,7 @@ import {
 } from "@symmio/frontend-sdk/state/user/hooks";
 import { useModalOpen } from "@symmio/frontend-sdk/state/application/hooks";
 import { ApplicationModal } from "@symmio/frontend-sdk/state/application/reducer";
-
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
 import { useTransferCollateral } from "@symmio/frontend-sdk/callbacks/useTransferCollateral";
 
 import { RowCenter, RowBetween } from "components/Row";
@@ -139,18 +139,13 @@ export default function WithdrawCooldown({
       return;
     }
 
-    try {
-      setAwaitingConfirmation(true);
-      await transferBalanceCallback();
-      setAwaitingConfirmation(false);
-    } catch (e) {
-      setAwaitingConfirmation(false);
-      if (e instanceof Error) {
-        console.log("awaitingConfirmation Error", e.message);
-      } else {
-        console.error(e);
-      }
+    setAwaitingConfirmation(true);
+    const { status, message } = await transferBalanceCallback();
+
+    if (status !== TransactionStatus.SUCCESS) {
+      toast.error(message);
     }
+    setAwaitingConfirmation(false);
   }, [
     showWithdrawBarModal,
     showWithdrawModal,

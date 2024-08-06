@@ -2,11 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 
-import { Modal } from "components/Modal";
-import { Option } from "components/Tab";
-import { Close as CloseIcon, DotFlashing } from "components/Icons";
-import { Row, RowBetween, RowStart } from "components/Row";
-import WithdrawCooldown from "components/App/AccountData/WithdrawCooldown";
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import {
   useAccountPartyAStat,
@@ -22,6 +17,13 @@ import { TransferTab } from "@symmio/frontend-sdk/types/transfer";
 import { useCollateralToken } from "@symmio/frontend-sdk/constants/tokens";
 import { useGetTokenWithFallbackChainId } from "@symmio/frontend-sdk/utils/token";
 import { useTransferCollateral } from "@symmio/frontend-sdk/callbacks/useTransferCollateral";
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
+
+import { Modal } from "components/Modal";
+import { Option } from "components/Tab";
+import { Close as CloseIcon, DotFlashing } from "components/Icons";
+import { Row, RowBetween, RowStart } from "components/Row";
+import WithdrawCooldown from "components/App/AccountData/WithdrawCooldown";
 
 const Wrapper = styled.div`
   display: flex;
@@ -191,18 +193,12 @@ function CancelWithdraw() {
       return;
     }
 
-    try {
-      setAwaitingConfirmation(true);
-      await transferBalanceCallback();
-      setAwaitingConfirmation(false);
-    } catch (e) {
-      setAwaitingConfirmation(false);
-      if (e instanceof Error) {
-        console.log("setAwaitingConfirmation", e.message);
-      } else {
-        console.error(e);
-      }
+    setAwaitingConfirmation(true);
+    const { status, message } = await transferBalanceCallback();
+    if (status !== TransactionStatus.SUCCESS) {
+      toast.error(message);
     }
+    setAwaitingConfirmation(false);
   }, [transferBalanceCallback, transferBalanceError]);
 
   if (awaitingConfirmation) {

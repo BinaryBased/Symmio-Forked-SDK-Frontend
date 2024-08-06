@@ -26,6 +26,7 @@ import {
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import useAccountData from "@symmio/frontend-sdk/hooks/useAccountData";
 import { useTransferCollateral } from "@symmio/frontend-sdk/callbacks/useTransferCollateral";
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
 
 import { Modal } from "components/Modal";
 import { Option } from "components/Tab";
@@ -113,20 +114,15 @@ export default function WithdrawModal() {
       return;
     }
 
-    try {
-      setAwaitingConfirmation(true);
-      await transferBalanceCallback();
+    setAwaitingConfirmation(true);
+    const { status, message } = await transferBalanceCallback();
+    if (status === TransactionStatus.SUCCESS) {
       setTypedAmount("");
-      setAwaitingConfirmation(false);
       toggleWithdrawModal();
-    } catch (e) {
-      setAwaitingConfirmation(false);
-      if (e instanceof Error) {
-        console.error(e);
-      } else {
-        console.error(e);
-      }
+    } else {
+      toast.error(message);
     }
+    setAwaitingConfirmation(false);
   }, [toggleWithdrawModal, transferBalanceCallback, transferBalanceError]);
 
   const onChange = (value: string) => {

@@ -6,6 +6,7 @@ import { darken } from "polished";
 export enum StateTabs {
   POSITIONS = "Positions",
   OPEN_ORDERS = "Open Orders",
+  INSTANT_OPEN_ORDERS = "Instant Open Orders",
   ORDER_HISTORY = "Order History",
 }
 
@@ -41,11 +42,13 @@ export default function OrdersTab({
   setActiveTab,
   positionsCount,
   openOrdersCount,
+  instantOpenOrdersCount,
 }: {
   activeTab: StateTabs;
   setActiveTab(s: StateTabs): void;
   positionsCount: number;
   openOrdersCount: number;
+  instantOpenOrdersCount: number;
 }): JSX.Element | null {
   return (
     <TabWrapper>
@@ -56,12 +59,20 @@ export default function OrdersTab({
         {StateTabs.POSITIONS}{" "}
         {positionsCount > 0 ? `(${positionsCount})` : null}
       </TabButton>
+
       <TabButton
         active={activeTab === StateTabs.OPEN_ORDERS}
         onClick={() => setActiveTab(StateTabs.OPEN_ORDERS)}
       >
         {StateTabs.OPEN_ORDERS}{" "}
         {openOrdersCount > 0 ? `(${openOrdersCount})` : null}
+      </TabButton>
+      <TabButton
+        active={activeTab === StateTabs.INSTANT_OPEN_ORDERS}
+        onClick={() => setActiveTab(StateTabs.INSTANT_OPEN_ORDERS)}
+      >
+        {StateTabs.INSTANT_OPEN_ORDERS}{" "}
+        {instantOpenOrdersCount > 0 ? `(${instantOpenOrdersCount})` : null}
       </TabButton>
       <TabButton
         active={activeTab === StateTabs.ORDER_HISTORY}

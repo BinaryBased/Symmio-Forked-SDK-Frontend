@@ -1,19 +1,21 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 import GRADIENT_CLOVERFIELD_LOGO from "/public/static/images/etc/GradientCloverfield.svg";
 
-import { Modal } from "components/Modal";
-import { DotFlashing, Wallet } from "components/Icons";
-
-import { Row, RowCenter, RowEnd, RowStart } from "components/Row";
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
 import { truncateAddress } from "@symmio/frontend-sdk/utils/address";
-import Checkbox from "components/CheckBox";
 import { useSignMessage } from "@symmio/frontend-sdk/callbacks/useMultiAccount";
 import { useWriteSign } from "@symmio/frontend-sdk/callbacks/useWriteSign";
 import { useGetMessage } from "@symmio/frontend-sdk/hooks/useCheckSign";
+
+import { Modal } from "components/Modal";
+import Checkbox from "components/CheckBox";
+import { DotFlashing, Wallet } from "components/Icons";
+import { Row, RowCenter, RowEnd, RowStart } from "components/Row";
 import GradientButton from "components/Button/GradientButton";
 
 const Wrapper = styled.div`
@@ -118,15 +120,12 @@ function ActionButton({ isTermsAccepted }: { isTermsAccepted: boolean }) {
   const onWriteSignCb = useCallback(
     async (sign: string) => {
       if (!writeSignCallback || !sign) return;
-      try {
-        await writeSignCallback(sign);
-      } catch (e) {
-        if (e instanceof Error) {
-          console.error(e);
-        } else {
-          console.debug(e);
-        }
+
+      const { status, message } = await writeSignCallback(sign);
+      if (status !== TransactionStatus.SUCCESS) {
+        toast.error(message);
       }
+
       setAwaitingConfirmation(false);
     },
     [writeSignCallback]

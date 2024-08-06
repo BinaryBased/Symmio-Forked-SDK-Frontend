@@ -26,6 +26,10 @@ import {
 import { useApproveCallback } from "@symmio/frontend-sdk/lib/hooks/useApproveCallback";
 import { ApprovalState } from "@symmio/frontend-sdk/lib/hooks/useApproval";
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
+import { useTransferCollateral } from "@symmio/frontend-sdk/callbacks/useTransferCollateral";
+import { useMintCollateral } from "@symmio/frontend-sdk/callbacks/useMintTestCollateral";
+import { useMultiAccountAddress } from "@symmio/frontend-sdk/state/chains/hooks";
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
 
 import { Modal } from "components/Modal";
 import InfoItem from "components/InfoItem";
@@ -34,10 +38,7 @@ import { DotFlashing } from "components/Icons";
 import { PrimaryButton } from "components/Button";
 import { CustomInputBox2 } from "components/InputBox";
 import { Close as CloseIcon } from "components/Icons";
-import { useTransferCollateral } from "@symmio/frontend-sdk/callbacks/useTransferCollateral";
-import { useMintCollateral } from "@symmio/frontend-sdk/callbacks/useMintTestCollateral";
 import { Row, RowBetween, RowStart } from "components/Row";
-import { useMultiAccountAddress } from "@symmio/frontend-sdk/state/chains/hooks";
 
 const Wrapper = styled.div`
   display: flex;
@@ -133,20 +134,15 @@ export default function DepositModal() {
       return;
     }
 
-    try {
-      setAwaitingConfirmation(true);
-      await transferBalanceCallback();
+    setAwaitingConfirmation(true);
+    const { status, message } = await transferBalanceCallback();
+    if (status === TransactionStatus.SUCCESS) {
       setTypedAmount("");
-      setAwaitingConfirmation(false);
       toggleDepositModal();
-    } catch (e) {
-      setAwaitingConfirmation(false);
-      if (e instanceof Error) {
-        console.error(e);
-      } else {
-        console.error(e);
-      }
+    } else {
+      toast.error(message);
     }
+    setAwaitingConfirmation(false);
   }, [toggleDepositModal, transferBalanceCallback, transferBalanceError]);
 
   const handleMintToken = useCallback(async () => {
@@ -155,19 +151,14 @@ export default function DepositModal() {
       return;
     }
 
-    try {
-      setAwaitingConfirmation(true);
-      await mintCallback();
+    setAwaitingConfirmation(true);
+    const { status, message } = await mintCallback();
+    if (status === TransactionStatus.SUCCESS) {
       setTypedAmount("");
-      setAwaitingConfirmation(false);
-    } catch (e) {
-      setAwaitingConfirmation(false);
-      if (e instanceof Error) {
-        console.error(e);
-      } else {
-        console.error(e);
-      }
+    } else {
+      toast.error(message);
     }
+    setAwaitingConfirmation(false);
   }, [mintCallback, mintCallbackError]);
 
   const handleApprove = async () => {

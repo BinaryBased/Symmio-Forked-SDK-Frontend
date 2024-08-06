@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import styled from "styled-components";
 import Image from "next/legacy/image";
+import toast from "react-hot-toast";
 
 import { useCollateralToken } from "@symmio/frontend-sdk/constants/tokens";
 import { truncateAddress } from "@symmio/frontend-sdk/utils/address";
@@ -12,6 +13,8 @@ import {
   useIsTermsAccepted,
   useUserWhitelist,
 } from "@symmio/frontend-sdk/state/user/hooks";
+import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
+import { WEB_SETTING } from "@symmio/frontend-sdk/config";
 
 import Column from "components/Column";
 import { Row, RowCenter, RowEnd, RowStart } from "components/Row";
@@ -21,7 +24,6 @@ import {
   Close as CloseIcon,
   DotFlashing,
 } from "components/Icons";
-import { WEB_SETTING } from "@symmio/frontend-sdk/config";
 import TermsAndServices from "components/TermsAndServices";
 
 const Wrapper = styled.div<{ modal?: boolean }>`
@@ -159,19 +161,18 @@ export default function CreateAccount({ onClose }: { onClose?: () => void }) {
 
   const onAddAccount = useCallback(async () => {
     if (!addAccountToContractCallback) return;
-    try {
-      setAwaitingConfirmation(true);
-      const txHash = await addAccountToContractCallback();
+
+    setAwaitingConfirmation(true);
+    const { status, message } = await addAccountToContractCallback();
+    if (status === TransactionStatus.SUCCESS) {
+      setTxHash(message);
       setAwaitingConfirmation(false);
-      if (txHash) setTxHash(txHash.hash);
-      onClose && onClose();
-    } catch (e) {
-      if (e instanceof Error) {
-        console.error(e);
-      } else {
-        console.debug(e);
-      }
+    } else {
+      toast.error(message);
+      setAwaitingConfirmation(false);
     }
+    onClose && onClose();
+
     setAwaitingConfirmation(false);
   }, [addAccountToContractCallback, onClose]);
 
