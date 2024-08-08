@@ -26,6 +26,7 @@ import { ApplicationModal } from "@symmio/frontend-sdk/state/application/reducer
 import WithdrawBarModal from "components/ReviewModal/WithdrawBarModal";
 import HedgerSelector from "components/HedgerSelector";
 import useActiveWagmi from "@symmio/frontend-sdk/lib/hooks/useActiveWagmi";
+import { useCustomHedgerMode } from "@symmio/frontend-sdk/state/user/hooks";
 
 const Wrapper = styled(Row)`
   gap: 5px;
@@ -168,6 +169,7 @@ export default function NavBar() {
   const { chainId } = useActiveWagmi();
   const showWithdrawBarModal = useModalOpen(ApplicationModal.WITHDRAW_BAR);
   const toggleWithdrawBarModal = useWithdrawBarModalToggle();
+  const isCustomHedgerMode = useCustomHedgerMode();
 
   const hasInjected = useInjectedAddress();
   const isNewNotification = useNewNotification();
@@ -202,7 +204,7 @@ export default function NavBar() {
           <Notifications />
           <Web3Network />
 
-          {chainId && <HedgerSelector />}
+          {chainId && isCustomHedgerMode && <HedgerSelector />}
           <Menu />
         </MobileWrapper>
         {showWithdrawBarModal && <WithdrawBarModal />}
@@ -237,7 +239,7 @@ export default function NavBar() {
             >
               <WithdrawCooldown formatedAmount={true} />
             </CooldownWrapper>
-            {chainId && <HedgerSelector />}
+            {chainId && isCustomHedgerMode && <HedgerSelector />}
             <Web3Status />
             <Notifications />
             <Web3Network />

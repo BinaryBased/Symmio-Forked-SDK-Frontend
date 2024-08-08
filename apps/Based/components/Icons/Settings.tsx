@@ -12,7 +12,7 @@ export const Settings = styled(({ isOpen, ...props }) => (
 ))<SvgStyledProps>`
   width: ${(props) => props.size ?? "15px"};
   height: ${(props) => props.size ?? "15px"};
-  color: ${(props) => props.color ?? "#919191"};
+  color: ${(props) => props.color ?? "#0A2357"};
   margin-right: 2px;
   &:hover {
     cursor: pointer;

@@ -33,12 +33,11 @@ const rotate = keyframes`
 const Indicator = styled.div<{ checked?: boolean }>`
   width: 1.2em;
   height: 1.2em;
-  background: ${({ theme, checked }) =>
-    checked ? theme.primaryDarkBg : theme.primaryDarkOld};
+  background: ${({ theme, checked }) => (checked ? theme.bg3 : theme.bg0)};
   position: absolute;
   top: 0em;
   left: -1.6em;
-  border: 1px solid ${({ theme }) => theme.primaryBlue};
+  border: 1px solid ${({ theme }) => theme.border1};
   border-radius: 0.2em;
   &::after {
     content: "";
@@ -51,7 +50,7 @@ const Indicator = styled.div<{ checked?: boolean }>`
     left: 0.35em;
     width: 30%;
     height: 60%;
-    border: solid ${({ theme }) => theme.primaryBlue};
+    border: solid ${({ theme }) => theme.darkPink};
     border-width: 0 0.1em 0.1em 0;
     animation-name: ${rotate};
     animation-duration: 0.3s;
