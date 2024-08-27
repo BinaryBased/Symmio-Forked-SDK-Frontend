@@ -50,20 +50,20 @@ export function useUserAccounts() {
 
     const accountsArray = getSingleWagmiResult(accounts) as Account[];
 
-    return (
-      accountsArray &&
-      accountsArray.map(
-        (acc: {
-          accountAddress: Address; // or whatever the correct type is
-          name: string;
-        }) =>
-          ({
-            accountAddress: acc.accountAddress.toString(),
-            name: acc.name,
-          } as Account)
-      )
-    );
-  }, [accounts, isError, isSuccess]);
+    return accountsArray
+      ? accountsArray.map(
+          (acc: {
+            accountAddress: Address; // or whatever the correct type is
+            name: string;
+          }) =>
+            ({
+              accountAddress: acc.accountAddress.toString(),
+              name: acc.name,
+              owner: account,
+            } as Account)
+        )
+      : [];
+  }, [account, accounts, isError, isSuccess]);
 
   return useMemo(
     () => ({
