@@ -14,7 +14,7 @@ const SummaryWrap = styled(RowCenter)`
 `;
 
 const ButtonWrap = styled.div`
-  margin-top: 100px;
+  margin-top: 65px;
   & > * {
     margin: 10px 0px;
   }
@@ -23,12 +23,14 @@ const ButtonWrap = styled.div`
 export default function Loading({ summary }: { summary: React.ReactNode }) {
   return (
     <Column>
-      <Image
-        src={"/static/images/etc/SimpleLogo.svg"}
-        alt="Asset"
-        width={72}
-        height={78}
-      />
+      <RowCenter margin={"35px 0px"}>
+        <Image
+          src={"/static/images/etc/SimpleLogo.svg"}
+          alt="Asset"
+          width={72}
+          height={78}
+        />
+      </RowCenter>
 
       <SummaryWrap>{summary}</SummaryWrap>
       <ButtonWrap>

@@ -66,7 +66,6 @@ const CancelBtn = styled.button<{ disabled?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
   color: ${({ theme }) => theme.warning};
   background-color: ${({ theme }) => theme.bgWarning};
   border: 1px solid ${({ theme }) => theme.warning};

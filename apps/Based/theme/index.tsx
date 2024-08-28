@@ -271,6 +271,10 @@ export const ThemedGlobalStyle = createGlobalStyle`
     font-family: 'Chakra Petch', monospace;
     font-size: 16px;
     font-weight:500;
+
+    .rs-picker-daterange-panel,.rs-picker-popup-daterange { 
+      z-index: ${Z_INDEX.popover};
+    }
   }
 
   button {

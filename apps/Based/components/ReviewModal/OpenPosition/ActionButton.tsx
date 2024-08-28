@@ -15,6 +15,7 @@ import { getCurrentTimeInSecond } from "@symmio/frontend-sdk/utils/time";
 import useInstantActions from "@symmio/frontend-sdk/hooks/useInstantActions";
 import { useInstantOpenDelegateAccesses } from "@symmio/frontend-sdk/callbacks/useDelegateAccesses";
 import { TransactionStatus } from "@symmio/frontend-sdk/utils/web3";
+import { useToggleOpenPositionModal } from "@symmio/frontend-sdk/state/application/hooks";
 
 export default function ActionButton() {
   const { state } = useTradePage();
@@ -78,10 +79,11 @@ export default function ActionButton() {
 function useInstantOpenPosition() {
   const { instantOpen, isSendQuoteDelegated } = useInstantActions();
   const { delegateAccessCallback, error } = useInstantOpenDelegateAccesses();
-  const { state: modalState } = useContext(StateContext);
+  const { state: modalState, setState } = useContext(StateContext);
 
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
+  const toggleModal = useToggleOpenPositionModal();
 
   useEffect(() => {
     if (isSendQuoteDelegated) setText("Instant Open");
@@ -113,10 +115,13 @@ function useInstantOpenPosition() {
     try {
       setLoading(true);
       await instantOpen();
+      setState(ModalState.END);
+      toggleModal();
       toast.success("open sent to hedger");
       setLoading(false);
     } catch (e) {
       setLoading(false);
+      toggleModal();
       toast.error(e.message);
       console.error(e);
     }
@@ -127,6 +132,8 @@ function useInstantOpenPosition() {
     isSendQuoteDelegated,
     loading,
     modalState,
+    setState,
+    toggleModal,
   ]);
 
   return { handleInstantOpen, loading, text };
